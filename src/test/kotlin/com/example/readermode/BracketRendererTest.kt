@@ -30,17 +30,26 @@ class BracketRendererTest {
         assertEquals(expected.trim(), BracketRenderer.toWords(input.trim()))
     }
 
+    @ParameterizedTest(name = "{0} → {1}")
+    @CsvSource(
+        "->, whose",
+    )
+    fun `maps operator tokens to words`(input: String, expected: String) {
+        assertEquals(expected, BracketRenderer.wordForOperator(input))
+    }
+
     @ParameterizedTest(name = "isReaderModePlaceholder({0}) = {1}")
     @CsvSource(
         "go,           true",
         "go go go,     true",
         "do hop,       true",
         "tap,          true",
-        "quick·brown,  false",   // middot placeholder, not a bracket one
+        "whose,        true",
+        "quick·brown,  false",   // middot placeholder, not a structural one
         "hello,        false",   // arbitrary word
         "'',           false",   // empty
     )
-    fun `identifies reader-mode bracket placeholders`(input: String, expected: Boolean) {
+    fun `identifies reader-mode structural placeholders`(input: String, expected: Boolean) {
         assertEquals(expected, BracketRenderer.isReaderModePlaceholder(input.trim('\'')))
     }
 }

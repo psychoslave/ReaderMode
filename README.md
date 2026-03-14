@@ -43,6 +43,28 @@ Each bracket or brace character is replaced by a short English word:
 | `{`   | `tap` | ↕ both end in **-p** |
 | `}`   | `hop` | ↕ |
 
+### Member-access operator → "whose"
+
+The `->` operator (PHP object member access) is rendered as **whose**:
+
+| Token | Word    |
+|-------|---------|
+| `->`  | `whose` |
+
+**Rationale — semantic ownership.**  
+`->` denotes that a property or method belongs to an object. *Whose* is the
+English possessive interrogative — the exact word we use to ask about
+ownership. `$cart->total` reads *"cart whose total"*, which maps cleanly
+onto the mental model: we are accessing something that the object owns.
+
+**Rationale — prosodic flow.**  
+The word slots naturally into spoken code:
+
+> `$variable->methodName()` → *"variable **whose** method·name **do** **go**"*
+
+Possession and invocation read as a natural phrase rather than a symbol
+interrupt.
+
 #### Word-choice rationale
 
 The four words were chosen to satisfy several constraints at once:
@@ -71,6 +93,16 @@ A function call like `__construct(SomeClass $instance)` reads aloud as:
 
 A class body opening `SomeClass {` reads as:
 > *"some·class **tap**"*
+
+### Comments → `…`
+
+When reader mode is active, every comment — single-line (`//`, `#`) or
+block (`/* … */`, `/** … */`) — is folded to a single **`…`** placeholder.
+The original comment text is never lost; expanding the fold (or toggling
+reader mode off) restores it instantly.
+
+The effect is a distraction-free view of executable code structure: variable
+names, control flow, and call signatures stand out without prose interruption.
 
 ### Spacing
 

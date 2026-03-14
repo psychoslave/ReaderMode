@@ -43,5 +43,7 @@ class ToggleReaderModeAction : ToggleAction(), DumbAware {
     }
 
     private fun isReaderModeFold(placeholder: String): Boolean =
-        MiddotConverter.MIDDOT in placeholder || BracketRenderer.isReaderModePlaceholder(placeholder)
+        MiddotConverter.MIDDOT in placeholder
+            || BracketRenderer.isReaderModePlaceholder(placeholder)
+            || placeholder.trim() == BracketRenderer.COMMENT_PLACEHOLDER
 }
