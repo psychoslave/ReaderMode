@@ -8,6 +8,9 @@ package com.example.readermode
  *  {  →  tap      }  →  hop
  *  (  →  do       )  →  go
  *
+ * Expression terminator (single-character):
+ *  ;  →  ay
+ *
  * Member-access operators (multi-character):
  *  ->  →  whose
  *
@@ -17,11 +20,16 @@ package com.example.readermode
  */
 object BracketRenderer {
 
+    // All single-character structural tokens that get word replacements.
+    // Semicolon is included alongside brackets so the spacing logic
+    // (no trailing space before a token that will add its own leading space)
+    // applies uniformly.
     private val BRACKET_WORDS = mapOf(
         '{' to "tap",
         '}' to "hop",
         '(' to "do",
         ')' to "go",
+        ';' to "ay",
     )
 
     /** Multi-character structural operators and their reader-mode words. */

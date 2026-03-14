@@ -12,6 +12,7 @@ class BracketRendererTest {
         "}, hop",
         "(, do",
         "), go",
+        ";, ay",
     )
     fun `maps single brackets to words`(input: String, expected: String) {
         assertEquals(expected, BracketRenderer.wordFor(input[0]))
@@ -57,6 +58,7 @@ class BracketRendererTest {
         "go go go,          true",
         "do hop,            true",
         "tap,               true",
+        "ay,                true",
         "whose,             true",
         "see manager,       true",
         "see some·variable, true",

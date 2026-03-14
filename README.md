@@ -32,39 +32,6 @@ The middle dot (U+00B7 `·`) was chosen because it is a genuine word-separator
 glyph (used in Catalan orthography, ancient Greek manuscripts, etc.), visually
 lighter than a hyphen or underscore, and unambiguous in code contexts.
 
-### Bracket tokens → English words
-
-Each bracket or brace character is replaced by a short English word:
-
-| Token | Word  | Rhyme pair |
-|-------|-------|------------|
-| `(`   | `do`  | ↕ both end in **-o** |
-| `)`   | `go`  | ↕ |
-| `{`   | `tap` | ↕ both end in **-p** |
-| `}`   | `hop` | ↕ |
-
-### Member-access operator → "whose"
-
-The `->` operator (PHP object member access) is rendered as **whose**:
-
-| Token | Word    |
-|-------|---------|
-| `->`  | `whose` |
-
-**Rationale — semantic ownership.**  
-`->` denotes that a property or method belongs to an object. *Whose* is the
-English possessive interrogative — the exact word we use to ask about
-ownership. `$cart->total` reads *"cart whose total"*, which maps cleanly
-onto the mental model: we are accessing something that the object owns.
-
-**Rationale — prosodic flow.**  
-The word slots naturally into spoken code:
-
-> `$variable->methodName()` → *"variable **whose** method·name **do** **go**"*
-
-Possession and invocation read as a natural phrase rather than a symbol
-interrupt.
-
 ### Variable sigil → "see"
 
 The `$` prefix on PHP variables is rendered as **see**:
@@ -88,13 +55,64 @@ it acts — the place the name governs.
 **Phonetic fit.**  
 Like every other structural word in the vocabulary, "see" starts with **s** —
 echoing the struck-S shape of `$` itself. It is a complete English word with
-no apocope, three letters, and slots cleanly into spoken code:
+no apocope, three letters, and reads cleanly in context:
 
 > `$this->methodName()` → *"**see** this **whose** method·name **do** **go**"*
 
-The possessive chain reads as a natural English noun phrase.
+### Bracket tokens → English words
 
-#### Word-choice rationale
+Each bracket or brace character is replaced by a short English word:
+
+| Token | Word  | Rhyme pair |
+|-------|-------|------------|
+| `(`   | `do`  | ↕ both end in **-o** |
+| `)`   | `go`  | ↕ |
+| `{`   | `tap` | ↕ both end in **-p** |
+| `}`   | `hop` | ↕ |
+
+### Expression terminator → "ay"
+
+The `;` statement terminator is rendered as **ay**:
+
+| Token | Word |
+|-------|------|
+| `;`   | `ay` |
+
+**Rationale — affirmative interjection.**  
+"Ay!" signals that something is confirmed, acknowledged, done — matching
+the role of `;` as the mark that a statement is complete and execution
+moves on. Each statement ends with a nod: *ay*.
+
+**Rationale — shape.**  
+The word ends in **y**, whose descending curved tail mirrors the descender
+of `;` itself — the same visual grounding that led `$` to words starting
+with **s** (its struck-S shape) and bracket pairs to rhyming endings.
+
+> `$a = 1; $b = 2;` → *"see a = 1 **ay** see b = 2 **ay**"*
+
+### Member-access operator → "whose"
+
+The `->` operator (PHP object member access) is rendered as **whose**:
+
+| Token | Word    |
+|-------|---------|
+| `->`  | `whose` |
+
+**Rationale — semantic ownership.**  
+`->` denotes that a property or method belongs to an object. *Whose* is the
+English possessive interrogative — the exact word we use to ask about
+ownership. `$cart->total` reads *"see cart whose total"*, which maps cleanly
+onto the mental model: we are accessing something that the object owns.
+
+**Rationale — prosodic flow.**  
+The word slots naturally into spoken code:
+
+> `$variable->methodName()` → *"**see** variable **whose** method·name **do** **go**"*
+
+Possession and invocation read as a natural phrase rather than a symbol
+interrupt.
+
+#### Word-choice rationale for bracket tokens
 
 The four bracket words were chosen to satisfy several constraints at once:
 
@@ -125,14 +143,14 @@ A class body opening `SomeClass {` reads as:
 
 ### Spacing
 
-Bracket and operator folds are padded automatically so that no token ever
-visually glues to its neighbour:
+Bracket, operator, and terminator folds are padded automatically so that no
+token ever visually glues to its neighbour:
 
 - a **leading space** is inserted when the preceding source character is not
   whitespace;
 - a **trailing space** is inserted when the following source character is
-  neither whitespace nor another bracket (which would contribute its own
-  leading space, avoiding doubles).
+  neither whitespace nor another structural token (which would contribute its
+  own leading space, avoiding doubles).
 
 Result for `__construct(SomeClass $instance)`:
 
