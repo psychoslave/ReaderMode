@@ -8,6 +8,9 @@ package com.example.readermode
  *  {  →  tap      }  →  hop
  *  (  →  do       )  →  go
  *
+ * Subscript brackets (single-character):
+ *  [  →  at      ]  →  ate
+ *
  * Expression terminator (single-character):
  *  ;  →  ay
  *
@@ -29,6 +32,8 @@ object BracketRenderer {
         '}' to "hop",
         '(' to "do",
         ')' to "go",
+        '[' to "at",
+        ']' to "ate",
         ';' to "ay",
     )
 

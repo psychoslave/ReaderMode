@@ -70,6 +70,30 @@ Each bracket or brace character is replaced by a short English word:
 | `{`   | `tap` | ↕ both end in **-p** |
 | `}`   | `hop` | ↕ |
 
+### Subscript brackets → "at" / "ate"
+
+Array subscript brackets are rendered as a matched word pair:
+
+| Token | Word  | Pair |
+|-------|-------|------|
+| `[`   | `at`  | ↕ both built on **-at** |
+| `]`   | `ate` | ↕ |
+
+**Rationale — locative / past pair.**  
+`[` opens a positional lookup: you are **at** a given index.  
+`]` closes it with **ate** — simple past of *eat* — the lookup consumed
+the index and yielded the value.  *Eating* a token is a genuine CS
+metaphor: parsers eat input, lookups consume a key to produce a value.
+
+**Minimal pair with `at`.**  
+`ate` = `at` + `e` — the same word, vowel lengthened into the past.
+The phonetic contrast is unambiguous: `at` /æt/ vs `ate` /eɪt/ — no
+collision when reading code aloud.
+
+> `$array[index]` → *"see array **at** index **ate**"*
+
+> `$matrix[row][col]` → *"see matrix **at** row **ate** **at** col **ate**"*
+
 ### Expression terminator → "ay"
 
 The `;` statement terminator is rendered as **ay**:
