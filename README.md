@@ -88,7 +88,7 @@ The word ends in **y**, whose descending curved tail mirrors the descender
 of `;` itself — the same visual grounding that led `$` to words starting
 with **s** (its struck-S shape) and bracket pairs to rhyming endings.
 
-> `$a = 1; $b = 2;` → *"see a = 1 **ay** see b = 2 **ay**"*
+> `$one = 1; $two = 2;` → *"see one = 1 **ay** see two = 2 **ay**"*
 
 ### Member-access operator → "whose"
 
@@ -122,8 +122,8 @@ Open and close brackets are thus audibly paired, mirroring the visual
 pairing they form on the page.
 
 **Short and percussive.**  
-Each word is a single syllable. Deeply nested code like `f(g(h()))` reads
-`f do g do h do go go go` — it scans and even has a rhythmic quality when
+Each word is a single syllable. Deeply nested code like `fob(gob(hob()))` reads
+`fob do gob do hob do go go go` — it scans and even has a rhythmic quality when
 spoken aloud. Repetitions roll off the tongue: *tap tap tap … hop hop hop.*
 
 **Interpretable as action words.**  
