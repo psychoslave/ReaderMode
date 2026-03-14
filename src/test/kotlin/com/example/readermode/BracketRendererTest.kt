@@ -38,19 +38,34 @@ class BracketRendererTest {
         assertEquals(expected, BracketRenderer.wordForOperator(input))
     }
 
+    @ParameterizedTest(name = "sigil rendering: {0} → {1}")
+    @CsvSource(
+        "\$manager,        see manager",
+        "\$someVariable,   see some·variable",
+        "\$HTMLParser,     see html·parser",
+        "\$this,           see this",
+    )
+    fun `renders dollar-sigil variables`(rawToken: String, expected: String) {
+        val name     = rawToken.removePrefix("$")
+        val nameForm = MiddotConverter.convert(name) ?: name
+        assertEquals(expected, "${BracketRenderer.SIGIL_WORD} $nameForm")
+    }
+
     @ParameterizedTest(name = "isReaderModePlaceholder({0}) = {1}")
     @CsvSource(
-        "go,           true",
-        "go go go,     true",
-        "do hop,       true",
-        "tap,          true",
-        "whose,        true",
-        "quick·brown,  false",   // middot placeholder, not a structural one
-        "hello,        false",   // arbitrary word
-        "'',           false",   // empty
+        "go,                true",
+        "go go go,          true",
+        "do hop,            true",
+        "tap,               true",
+        "whose,             true",
+        "see manager,       true",
+        "see some·variable, true",
+        "see,               true",
+        "quick·brown,       false",
+        "hello,             false",
+        "'',                false",
     )
     fun `identifies reader-mode structural placeholders`(input: String, expected: Boolean) {
         assertEquals(expected, BracketRenderer.isReaderModePlaceholder(input.trim('\'')))
     }
 }
-

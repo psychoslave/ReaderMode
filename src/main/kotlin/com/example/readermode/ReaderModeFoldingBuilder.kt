@@ -5,7 +5,6 @@ import com.intellij.lang.folding.FoldingBuilderEx
 import com.intellij.lang.folding.FoldingDescriptor
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.project.DumbAware
-import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiRecursiveElementVisitor
 import com.intellij.psi.impl.source.tree.LeafPsiElement
@@ -16,7 +15,7 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement
  * Identifiers         → middot placeholder     (quickBrownFox  →  quick·brown·fox)
  * Brackets / braces   → word placeholder       ((  →  do,  {  →  tap)
  * Member-access (->)  → word placeholder       (->  →  whose)
- * Comments            → ellipsis placeholder   (any comment  →  …)
+ * $ variable sigil    → "see" + name           ($someVar  →  see some·var)
  *
  * Bracket and operator placeholders are padded with spaces so adjacent raw text
  * or other folds are never visually glued:
@@ -26,8 +25,8 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement
  *
  * Examples
  *   $obj->makeSomething()
- *     →  $obj[ whose ][make·something][ do][ go]
- *     =  $obj whose make·something do go
+ *     →  [see obj][ whose ][make·something][ do][ go]
+ *     =  see obj whose make·something do go
  *
  *   )))
  *     →  [ go][ go][ go]
@@ -47,20 +46,7 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
 
         root.accept(object : PsiRecursiveElementVisitor() {
             override fun visitElement(element: PsiElement) {
-                // ── Comment block ──────────────────────────────────────────────
-                // Handle before super.visitElement so we don't descend into
-                // a composite comment's children and create duplicate folds.
-                if (element is PsiComment) {
-                    descriptors.add(
-                        FoldingDescriptor(
-                            element.node, element.textRange, null,
-                            BracketRenderer.COMMENT_PLACEHOLDER
-                        )
-                    )
-                    return // skip children
-                }
-
-                super.visitElement(element) // recurse for all other elements
+                super.visitElement(element)
                 if (element !is LeafPsiElement) return
                 val text = element.text
 
@@ -95,6 +81,18 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
                         )
                     }
 
+                    // ── $ variable sigil (e.g. $manager, $someVariable) ───────
+                    text.length > 1 && text[0] == '$' -> {
+                        val name     = text.substring(1)
+                        val nameForm = MiddotConverter.convert(name) ?: name
+                        descriptors.add(
+                            FoldingDescriptor(
+                                element.node, element.textRange, null,
+                                "${BracketRenderer.SIGIL_WORD} $nameForm"
+                            )
+                        )
+                    }
+
                     // ── Compound identifier ────────────────────────────────────
                     text.length >= 2 -> {
                         val middot = MiddotConverter.convert(text) ?: return
@@ -110,11 +108,13 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
     }
 
     override fun getPlaceholderText(node: ASTNode): String {
-        val psi  = node.psi
-        if (psi is PsiComment) return BracketRenderer.COMMENT_PLACEHOLDER
         val text = node.text
         if (text.length == 1) BracketRenderer.wordFor(text[0])?.let { return it }
         BracketRenderer.wordForOperator(text)?.let { return it }
+        if (text.length > 1 && text[0] == '$') {
+            val name = text.substring(1)
+            return "${BracketRenderer.SIGIL_WORD} ${MiddotConverter.convert(name) ?: name}"
+        }
         return MiddotConverter.convert(text) ?: text
     }
 

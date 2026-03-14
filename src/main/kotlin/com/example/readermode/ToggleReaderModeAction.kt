@@ -11,8 +11,9 @@ import com.intellij.openapi.project.DumbAware
  * View-menu toggle that enables / disables Reader Mode.
  *
  * On every toggle it immediately collapses (ON) or expands (OFF) all fold regions
- * that belong to the reader-mode plugin (identified by middot in identifiers, or
- * bracket-word placeholders like "go", "do go", "tap hop", etc.).
+ * that belong to the reader-mode plugin — identified by:
+ *  - a middot character in the placeholder (compound identifier folds)
+ *  - a recognised structural placeholder (bracket, operator, or sigil folds)
  */
 class ToggleReaderModeAction : ToggleAction(), DumbAware {
 
@@ -24,7 +25,6 @@ class ToggleReaderModeAction : ToggleAction(), DumbAware {
 
         val project = e.project ?: return
 
-        // Apply the collapse / expand change to every open text editor immediately.
         ApplicationManager.getApplication().invokeLater {
             FileEditorManager.getInstance(project).allEditors
                 .filterIsInstance<TextEditor>()
@@ -34,7 +34,6 @@ class ToggleReaderModeAction : ToggleAction(), DumbAware {
                         editor.foldingModel.allFoldRegions
                             .filter { isReaderModeFold(it.placeholderText) }
                             .forEach { fold ->
-                                // collapsed = reader-mode ON  →  expanded when turning OFF
                                 fold.isExpanded = !state
                             }
                     }
@@ -45,5 +44,4 @@ class ToggleReaderModeAction : ToggleAction(), DumbAware {
     private fun isReaderModeFold(placeholder: String): Boolean =
         MiddotConverter.MIDDOT in placeholder
             || BracketRenderer.isReaderModePlaceholder(placeholder)
-            || placeholder.trim() == BracketRenderer.COMMENT_PLACEHOLDER
 }

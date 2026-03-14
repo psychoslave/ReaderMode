@@ -65,9 +65,38 @@ The word slots naturally into spoken code:
 Possession and invocation read as a natural phrase rather than a symbol
 interrupt.
 
+### Variable sigil → "see"
+
+The `$` prefix on PHP variables is rendered as **see**:
+
+| Source           | Reader view           |
+|------------------|-----------------------|
+| `$manager`       | `see manager`         |
+| `$someClass`     | `see some·class`      |
+| `$this`          | `see this`            |
+
+**Rationale — deictic interjection.**  
+In English, "See!" is used to point at or draw attention to something — the
+exact gesture a sigil performs: it marks a name as a reference to a value.
+`$manager` reads *"see manager"*: look here — manager.
+
+**Rationale — locus noun.**  
+A "see" (ecclesiastical) is the seat where autonomous authority is exercised.
+By metaphor: a variable is the locus at which a value resides and from which
+it acts — the place the name governs.
+
+**Phonetic fit.**  
+Like every other structural word in the vocabulary, "see" starts with **s** —
+echoing the struck-S shape of `$` itself. It is a complete English word with
+no apocope, three letters, and slots cleanly into spoken code:
+
+> `$this->methodName()` → *"**see** this **whose** method·name **do** **go**"*
+
+The possessive chain reads as a natural English noun phrase.
+
 #### Word-choice rationale
 
-The four words were chosen to satisfy several constraints at once:
+The four bracket words were chosen to satisfy several constraints at once:
 
 **Phonetic symmetry within each pair.**  
 `do` / `go` share the `-o` ending; `tap` / `hop` share the `-p` ending.
@@ -89,25 +118,15 @@ actually *do* in code:
 
 **Prosody when vocalised.**  
 A function call like `__construct(SomeClass $instance)` reads aloud as:
-> *"underscore underscore construct **do** some·class dollar·instance **go**"*
+> *"underscore underscore construct **do** some·class **see** instance **go**"*
 
 A class body opening `SomeClass {` reads as:
 > *"some·class **tap**"*
 
-### Comments → `…`
-
-When reader mode is active, every comment — single-line (`//`, `#`) or
-block (`/* … */`, `/** … */`) — is folded to a single **`…`** placeholder.
-The original comment text is never lost; expanding the fold (or toggling
-reader mode off) restores it instantly.
-
-The effect is a distraction-free view of executable code structure: variable
-names, control flow, and call signatures stand out without prose interruption.
-
 ### Spacing
 
-Bracket folds are padded automatically so that no token ever visually glues
-to its neighbour:
+Bracket and operator folds are padded automatically so that no token ever
+visually glues to its neighbour:
 
 - a **leading space** is inserted when the preceding source character is not
   whitespace;
@@ -118,7 +137,7 @@ to its neighbour:
 Result for `__construct(SomeClass $instance)`:
 
 ```
-__construct do some·class $instance go
+__construct do some·class see instance go
 ```
 
 ---
@@ -155,7 +174,7 @@ reader-mode folds in every open editor, so the switch feels instant.
 
 ```
 src/main/kotlin/com/example/readermode/
-  BracketRenderer.kt        bracket ↔ word map, padding helpers
+  BracketRenderer.kt        structural token → word map, padding helpers
   MiddotConverter.kt        identifier word-splitting (regex-based)
   ReaderModeFoldingBuilder.kt  PSI visitor, fold descriptor builder
   ReaderModeService.kt      persistent enabled/disabled toggle
@@ -181,7 +200,3 @@ Requirements: JDK 17, Gradle 9 (wrapper included), `mise` for JDK management.
 # Run unit tests
 ./gradlew test
 ```
-
-
-
-

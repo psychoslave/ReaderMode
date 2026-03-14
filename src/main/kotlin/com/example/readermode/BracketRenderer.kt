@@ -5,15 +5,15 @@ package com.example.readermode
  * helpers used by the folding builder and the toggle action.
  *
  * Brackets / braces (single-character):
- *  {  →  tap
- *  }  →  hop
- *  (  →  do
- *  )  →  go
+ *  {  →  tap      }  →  hop
+ *  (  →  do       )  →  go
  *
  * Member-access operators (multi-character):
  *  ->  →  whose
  *
- * Comments are folded to [COMMENT_PLACEHOLDER] ("…").
+ * Variable sigil:
+ *  $name     →  see name
+ *  $someVar  →  see some·var
  */
 object BracketRenderer {
 
@@ -29,8 +29,19 @@ object BracketRenderer {
         "->" to "whose",
     )
 
-    /** Placeholder used for any comment fold. */
-    const val COMMENT_PLACEHOLDER = "…"
+    /**
+     * Word used to render the `$` variable sigil.
+     *
+     * "see" is a complete English word (no apocope) with several converging
+     * meanings that all fit the role of a variable sigil:
+     *  - **Deictic interjection** — "See!" points at / indicates something,
+     *    mirroring the sigil's role of marking a name as a reference to a value.
+     *  - **Ecclesiastical noun** — a "see" is the seat where autonomous power
+     *    is exercised; by metaphor, the locus at which a value resides and acts
+     *    (cf. a memory location).
+     *  - Starts with **s**, echoing the struck-S shape of `$` itself.
+     */
+    const val SIGIL_WORD = "see"
 
     private val WORDS_SET: Set<String> = (BRACKET_WORDS.values + OPERATOR_WORDS.values).toSet()
 
@@ -44,11 +55,18 @@ object BracketRenderer {
     fun wordForOperator(text: String): String? = OPERATOR_WORDS[text]
 
     /**
-     * Returns true when [placeholder] is a reader-mode structural placeholder,
-     * i.e. every space-separated token is one of the bracket/operator words.
+     * Returns true when [placeholder] is a reader-mode structural placeholder:
+     *  - bracket/operator words ("do", "go", "whose", etc.)
+     *  - sigil fold starting with [SIGIL_WORD]
+     *
      * Used by [ToggleReaderModeAction] to identify which folds belong to us.
      */
-    fun isReaderModePlaceholder(placeholder: String): Boolean =
-        placeholder.isNotBlank()
-            && placeholder.trim().split(' ').filter { it.isNotEmpty() }.all { it in WORDS_SET }
+    fun isReaderModePlaceholder(placeholder: String): Boolean {
+        val trimmed = placeholder.trim()
+        return when {
+            trimmed == SIGIL_WORD || trimmed.startsWith("$SIGIL_WORD ") -> true
+            else -> trimmed.isNotEmpty()
+                && trimmed.split(' ').filter { it.isNotEmpty() }.all { it in WORDS_SET }
+        }
+    }
 }
