@@ -1,0 +1,34 @@
+<idea-plugin>
+    <id>com.example.readermode</id>
+    <name>Reader Mode</name>
+    <vendor email="contact@example.com" url="">Example</vendor>
+    <description><![CDATA[
+        Displays source code in <b>reader mode</b>: compound identifiers (camelCase, snake_case,
+        PascalCase, SCREAMING_SNAKE_CASE, etc.) are rendered with a middle dot (·) separator
+        for improved readability, without modifying the actual source.
+        <br/><br/>
+        Toggle via <b>View → Reader Mode</b>.
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
+
+    <!-- Language-specific folding registrations loaded only when the respective plugin is present -->
+    <depends optional="true" config-file="readermode-java.xml">com.intellij.java</depends>
+    <depends optional="true" config-file="readermode-kotlin.xml">org.jetbrains.kotlin</depends>
+    <depends optional="true" config-file="readermode-php.xml">com.jetbrains.php</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceImplementation="com.example.readermode.ReaderModeService"/>
+    </extensions>
+
+    <actions>
+        <action id="ReaderMode.Toggle"
+                class="com.example.readermode.ToggleReaderModeAction"
+                text="Reader Mode"
+                description="Toggle reader mode: render identifiers with middle dot separators">
+            <add-to-group group-id="ViewMenu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>
+

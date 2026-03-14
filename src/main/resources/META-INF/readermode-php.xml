@@ -1,0 +1,6 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <lang.foldingBuilder language="PHP"
+                             implementationClass="com.example.readermode.ReaderModeFoldingBuilder"/>
+    </extensions>
+</idea-plugin>
