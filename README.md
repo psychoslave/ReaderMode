@@ -66,8 +66,8 @@ actually *do* in code:
 - `{…}` — you *tap* into a block, then *hop* out.
 
 **Prosody when vocalised.**  
-A function call like `__construct(CartManager $manager)` reads aloud as:
-> *"underscore underscore construct **do** cart·manager dollar·manager **go**"*
+A function call like `__construct(SomeClass $instance)` reads aloud as:
+> *"underscore underscore construct **do** some·class dollar·instance **go**"*
 
 A class body opening `SomeClass {` reads as:
 > *"some·class **tap**"*
@@ -83,10 +83,10 @@ to its neighbour:
   neither whitespace nor another bracket (which would contribute its own
   leading space, avoiding doubles).
 
-Result for `__construct(CartManager $manager)`:
+Result for `__construct(SomeClass $instance)`:
 
 ```
-__construct do cart·manager $manager go
+__construct do some·class $instance go
 ```
 
 ---
@@ -100,9 +100,9 @@ original text.  No file is ever written to.
 One fold is created per token:
 
 ```
-Source:   makeSomething   (         arg       )
-Folds:    [make·something] [ do ]  [arg] [ go]
-Reads:     make·something   do     arg    go
+Source:   makeSomething   (            arguments          )
+Folds:    [make·something] [ do ]  [arguments] [ go]
+Reads:     make·something   do     arguments    go
 ```
 
 The folding builder (`ReaderModeFoldingBuilder`) is a single-pass
@@ -149,4 +149,7 @@ Requirements: JDK 17, Gradle 9 (wrapper included), `mise` for JDK management.
 # Run unit tests
 ./gradlew test
 ```
+
+
+
 
