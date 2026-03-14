@@ -36,16 +36,16 @@ lighter than a hyphen or underscore, and unambiguous in code contexts.
 
 The `$` prefix on PHP variables is rendered as **see**:
 
-| Source           | Reader view           |
-|------------------|-----------------------|
-| `$manager`       | `see manager`         |
-| `$someClass`     | `see some·class`      |
-| `$this`          | `see this`            |
+| Source            | Reader view            |
+|-------------------|------------------------|
+| `$variable`       | `see variable`         |
+| `$someInstance`   | `see some·instance`    |
+| `$this`           | `see this`             |
 
 **Rationale — deictic interjection.**  
 In English, "See!" is used to point at or draw attention to something — the
 exact gesture a sigil performs: it marks a name as a reference to a value.
-`$manager` reads *"see manager"*: look here — manager.
+`$variable` reads *"see variable"*: look here — variable.
 
 **Rationale — locus noun.**  
 A "see" (ecclesiastical) is the seat where autonomous authority is exercised.
@@ -101,7 +101,7 @@ The `->` operator (PHP object member access) is rendered as **whose**:
 **Rationale — semantic ownership.**  
 `->` denotes that a property or method belongs to an object. *Whose* is the
 English possessive interrogative — the exact word we use to ask about
-ownership. `$cart->total` reads *"see cart whose total"*, which maps cleanly
+ownership. `$instance->property` reads *"see instance whose property"*, which maps cleanly
 onto the mental model: we are accessing something that the object owns.
 
 **Rationale — prosodic flow.**  
