@@ -8,7 +8,7 @@ class BracketRendererTest {
 
     @ParameterizedTest(name = "{0} → {1}")
     @CsvSource(
-        "{, through",
+        "{, tap",
         "}, hop",
         "(, do",
         "), go",
@@ -23,7 +23,7 @@ class BracketRendererTest {
         ")),          go go",
         "))),         go go go",
         "(},          do hop",
-        "{(,          through do",
+        "{(,          tap do",
         "))(,         go go do",
     )
     fun `converts bracket sequences to space-joined words`(input: String, expected: String) {
@@ -35,7 +35,7 @@ class BracketRendererTest {
         "go,           true",
         "go go go,     true",
         "do hop,       true",
-        "through,      true",
+        "tap,          true",
         "quick·brown,  false",   // middot placeholder, not a bracket one
         "hello,        false",   // arbitrary word
         "'',           false",   // empty

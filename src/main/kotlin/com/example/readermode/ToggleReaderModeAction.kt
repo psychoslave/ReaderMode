@@ -12,7 +12,7 @@ import com.intellij.openapi.project.DumbAware
  *
  * On every toggle it immediately collapses (ON) or expands (OFF) all fold regions
  * that belong to the reader-mode plugin (identified by middot in identifiers, or
- * bracket-word placeholders like "go", "do go", "through hop", etc.).
+ * bracket-word placeholders like "go", "do go", "tap hop", etc.).
  */
 class ToggleReaderModeAction : ToggleAction(), DumbAware {
 

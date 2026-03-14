@@ -4,7 +4,7 @@ package com.example.readermode
  * Maps bracket/brace characters to their reader-mode words and provides
  * helpers used by the folding builder and the toggle action.
  *
- *  {  →  through
+ *  {  →  tap
  *  }  →  hop
  *  (  →  do
  *  )  →  go
@@ -15,7 +15,7 @@ package com.example.readermode
 object BracketRenderer {
 
     private val BRACKET_WORDS = mapOf(
-        '{' to "through",
+        '{' to "tap",
         '}' to "hop",
         '(' to "do",
         ')' to "go",

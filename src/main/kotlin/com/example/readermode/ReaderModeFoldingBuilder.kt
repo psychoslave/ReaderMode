@@ -13,7 +13,7 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement
  * Folding builder — one fold per token, no merging.
  *
  * Identifiers   → middot placeholder  (e.g. quickBrownFox → quick·brown·fox)
- * Brackets      → word placeholder    (e.g. (  →  do)
+ * Brackets      → word placeholder    (e.g. (  →  do,  {  →  tap)
  *
  * Bracket placeholders are padded with spaces so adjacent raw text or other folds
  * are never visually glued:
