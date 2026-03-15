@@ -92,7 +92,7 @@ collision when reading code aloud.
 
 > `$array[index]` → *"see array **at** index **ate**"*
 
-> `$matrix[row][col]` → *"see matrix **at** row **ate** **at** col **ate**"*
+> `$matrix[row][lat]` → *"see matrix **at** row **ate** **at** lat **ate**"*
 
 ### Expression terminator → "ay"
 
