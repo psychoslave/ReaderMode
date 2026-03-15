@@ -134,7 +134,7 @@ when reading code aloud.  *Eft*'s very rarity is a feature: it sits
 outside the active vocabulary of any mainstream language, leaving it
 unambiguously ours.
 
-> `fob(gob, hob)` → *"fob **do** gob **eft** hob **go**"*
+> `set(key, value)` → *"set **do** key **eft** value **go**"*
 
 > `$array = [one, two, three]` → *"see array = **at** one **eft** two **eft** three **ate**"*
 
