@@ -303,11 +303,11 @@ reader-mode folds in every open editor, so the switch feels instant.
 
 ```
 src/main/kotlin/com/example/readermode/
-  BracketRenderer.kt        structural token → word map, padding helpers
-  MiddotConverter.kt        identifier word-splitting (regex-based)
-  ReaderModeFoldingBuilder.kt  PSI visitor, fold descriptor builder
-  ReaderModeService.kt      persistent enabled/disabled toggle
-  ToggleReaderModeAction.kt View-menu action
+  TokenRenderer.kt            structural token → word map, padding helpers
+  MiddotConverter.kt          identifier word-splitting (regex-based)
+  ReaderModeFoldingBuilder.kt PSI visitor, fold descriptor builder
+  ReaderModeService.kt        persistent enabled/disabled toggle
+  ToggleReaderModeAction.kt   View-menu action
 
 src/main/resources/META-INF/
   plugin.xml                core descriptor

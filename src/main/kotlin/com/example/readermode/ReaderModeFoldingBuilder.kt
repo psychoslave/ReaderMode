@@ -55,17 +55,17 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
 
                 when {
                     // ── Single-character bracket / prefix operator ─────────────
-                    text.length == 1 && BracketRenderer.isBracket(text[0]) -> {
-                        val word  = BracketRenderer.wordFor(text[0])!!
+                    text.length == 1 && TokenRenderer.isBracket(text[0]) -> {
+                        val word  = TokenRenderer.wordFor(text[0])!!
                         val start = element.textRange.startOffset
                         val end   = element.textRange.endOffset
                         val leading  = if (start > 0
                             && !source[start - 1].isWhitespace()
-                            && !BracketRenderer.isConnectingPrefix(source[start - 1])
+                            && !TokenRenderer.isConnectingPrefix(source[start - 1])
                         ) " " else ""
                         val trailing = if (end < source.length
                             && !source[end].isWhitespace()
-                            && !BracketRenderer.isBracket(source[end])
+                            && !TokenRenderer.isBracket(source[end])
                             && !word.endsWith("-")
                         ) " " else ""
                         descriptors.add(
@@ -74,17 +74,17 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
                     }
 
                     // ── Multi-character structural operator (e.g. ->) ─────────
-                    BracketRenderer.isOperator(text) -> {
-                        val word  = BracketRenderer.wordForOperator(text)!!
+                    TokenRenderer.isOperator(text) -> {
+                        val word  = TokenRenderer.wordForOperator(text)!!
                         val start = element.textRange.startOffset
                         val end   = element.textRange.endOffset
                         val leading  = if (start > 0
                             && !source[start - 1].isWhitespace()
-                            && !BracketRenderer.isConnectingPrefix(source[start - 1])
+                            && !TokenRenderer.isConnectingPrefix(source[start - 1])
                         ) " " else ""
                         val trailing = if (end < source.length
                             && !source[end].isWhitespace()
-                            && !BracketRenderer.isBracket(source[end])
+                            && !TokenRenderer.isBracket(source[end])
                             && !word.endsWith("-")
                         ) " " else ""
                         descriptors.add(
@@ -97,7 +97,7 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
                         val sigils   = text.takeWhile { it == '$' }.length
                         val name     = text.substring(sigils)
                         val nameForm = MiddotConverter.convert(name) ?: name
-                        val prefix   = BracketRenderer.SIGIL_PREFIX.repeat(sigils)
+                        val prefix   = TokenRenderer.SIGIL_PREFIX.repeat(sigils)
                         descriptors.add(
                             FoldingDescriptor(element.node, element.textRange, null, prefix + nameForm)
                         )
@@ -119,12 +119,12 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
 
     override fun getPlaceholderText(node: ASTNode): String {
         val text = node.text
-        if (text.length == 1) BracketRenderer.wordFor(text[0])?.let { return it }
-        BracketRenderer.wordForOperator(text)?.let { return it }
+        if (text.length == 1) TokenRenderer.wordFor(text[0])?.let { return it }
+        TokenRenderer.wordForOperator(text)?.let { return it }
         if (text.length > 1 && text[0] == '$') {
             val sigils = text.takeWhile { it == '$' }.length
             val name   = text.substring(sigils)
-            return BracketRenderer.SIGIL_PREFIX.repeat(sigils) + (MiddotConverter.convert(name) ?: name)
+            return TokenRenderer.SIGIL_PREFIX.repeat(sigils) + (MiddotConverter.convert(name) ?: name)
         }
         return MiddotConverter.convert(text) ?: text
     }

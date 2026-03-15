@@ -43,5 +43,5 @@ class ToggleReaderModeAction : ToggleAction(), DumbAware {
 
     private fun isReaderModeFold(placeholder: String): Boolean =
         MiddotConverter.MIDDOT in placeholder
-            || BracketRenderer.isReaderModePlaceholder(placeholder)
+            || TokenRenderer.isReaderModePlaceholder(placeholder)
 }

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
-class BracketRendererTest {
+class TokenRendererTest {
 
     @ParameterizedTest(name = "{0} → {1}")
     @CsvSource(
@@ -20,7 +20,7 @@ class BracketRendererTest {
         "!, non-",
     )
     fun `maps single brackets to words`(input: String, expected: String) {
-        assertEquals(expected, BracketRenderer.wordFor(input[0]))
+        assertEquals(expected, TokenRenderer.wordFor(input[0]))
     }
 
     @ParameterizedTest(name = "toWords({0}) = {1}")
@@ -33,7 +33,7 @@ class BracketRendererTest {
         "))(,         go go do",
     )
     fun `converts bracket sequences to space-joined words`(input: String, expected: String) {
-        assertEquals(expected.trim(), BracketRenderer.toWords(input.trim()))
+        assertEquals(expected.trim(), TokenRenderer.toWords(input.trim()))
     }
 
     @ParameterizedTest(name = "{0} → {1}")
@@ -42,7 +42,7 @@ class BracketRendererTest {
         "::, whence",
     )
     fun `maps operator tokens to words`(input: String, expected: String) {
-        assertEquals(expected, BracketRenderer.wordForOperator(input))
+        assertEquals(expected, TokenRenderer.wordForOperator(input))
     }
 
     @ParameterizedTest(name = "sigil rendering: {0} → {1}")
@@ -57,7 +57,7 @@ class BracketRendererTest {
         val sigils   = rawToken.takeWhile { it == '$' }.length
         val name     = rawToken.substring(sigils)
         val nameForm = MiddotConverter.convert(name) ?: name
-        val prefix   = BracketRenderer.SIGIL_PREFIX.repeat(sigils)
+        val prefix   = TokenRenderer.SIGIL_PREFIX.repeat(sigils)
         assertEquals(expected.trim(), prefix + nameForm)
     }
 
@@ -82,14 +82,14 @@ class BracketRendererTest {
         "'',                false",
     )
     fun `identifies reader-mode structural placeholders`(input: String, expected: Boolean) {
-        assertEquals(expected, BracketRenderer.isReaderModePlaceholder(input.trim('\'')))
+        assertEquals(expected, TokenRenderer.isReaderModePlaceholder(input.trim('\'')))
     }
 
     @Test
     fun `isConnectingPrefix is true only for prefix-connector tokens`() {
-        assertTrue(BracketRenderer.isConnectingPrefix('!'))
-        assertFalse(BracketRenderer.isConnectingPrefix('('))
-        assertFalse(BracketRenderer.isConnectingPrefix(')'))
-        assertFalse(BracketRenderer.isConnectingPrefix(';'))
+        assertTrue(TokenRenderer.isConnectingPrefix('!'))
+        assertFalse(TokenRenderer.isConnectingPrefix('('))
+        assertFalse(TokenRenderer.isConnectingPrefix(')'))
+        assertFalse(TokenRenderer.isConnectingPrefix(';'))
     }
 }

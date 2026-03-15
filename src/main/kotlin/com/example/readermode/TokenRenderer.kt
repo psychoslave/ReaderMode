@@ -31,7 +31,7 @@ package com.example.readermode
  *  $someVar →  lo-some·var
  *  $$name   →  lo-lo-name   (PHP variable variables)
  */
-object BracketRenderer {
+object TokenRenderer {
 
     // All single-character structural tokens that get word replacements.
     // Semicolon is included alongside brackets so the spacing logic
