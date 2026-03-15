@@ -222,6 +222,31 @@ breadcrumb — *whence* comes this name?
 asks about static origin in the type hierarchy. The two operators serve
 different navigation models, and the two words reflect that distinction.
 
+### Arrow-function tokens → "from" / "to"
+
+The `fn` keyword and `=>` operator are rendered as a directional pair:
+
+| Token | Word   |
+|-------|--------|
+| `fn`  | `from` |
+| `=>`  | `to`   |
+
+**Rationale — directional pair.**  
+`fn(…) => expr` declares a mapping: the parameters are the *source*, the
+expression is the *destination*.  *From* and *to* are the shortest,
+most natural English words for that relationship, and together they read
+as a complete directional phrase.
+
+`=>` doubles as the PHP associative-array value separator
+(`'key' => 'value'`), where *to* is equally apt: the key maps *to* its
+value.
+
+> `->map(fn($item) => $item->getId())`  
+> → *"whose map do **from** do lo-item go **to** lo-item whose get·id do go"*
+
+> `['host' => $url, 'port' => $port]`  
+> → *"at 'host' **to** lo-url **eft** 'port' **to** lo-port ate"*
+
 ### Prefix-negation operator → "non-"
 
 The `!` prefix operator is rendered as **non-**:

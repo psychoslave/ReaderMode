@@ -26,6 +26,10 @@ package com.example.readermode
  * Scope-resolution operator (multi-character):
  *  ::  →  whence
  *
+ * Arrow-function tokens (multi-character):
+ *  fn  →  from    (arrow-function introducer)
+ *  =>  →  to      (arrow-function body / associative-array separator)
+ *
  * Variable sigil (rendered as a connecting prefix):
  *  $name    →  lo-name
  *  $someVar →  lo-some·var
@@ -53,6 +57,8 @@ object TokenRenderer {
     private val OPERATOR_WORDS = mapOf(
         "->" to "whose",
         "::" to "whence",
+        "fn" to "from",
+        "=>" to "to",
     )
 
     /**

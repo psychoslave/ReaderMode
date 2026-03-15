@@ -40,6 +40,8 @@ class TokenRendererTest {
     @CsvSource(
         "->, whose",
         "::, whence",
+        "fn, from",
+        "=>, to",
     )
     fun `maps operator tokens to words`(input: String, expected: String) {
         assertEquals(expected, TokenRenderer.wordForOperator(input))
@@ -73,6 +75,8 @@ class TokenRendererTest {
         "ay,                true",
         "whose,             true",
         "whence,            true",
+        "from,              true",
+        "to,                true",
         "non-,              true",
         "lo-manager,        true",
         "lo-some·variable,  true",
