@@ -30,6 +30,11 @@ package com.example.readermode
  *  fn  →  from    (arrow-function introducer)
  *  =>  →  to      (arrow-function body / associative-array separator)
  *
+ * Assignment and equality operators:
+ *  =   →  by    (assignment: x defined by value)
+ *  ==  →  par   (loose equality: x on par with y, value with coercion)
+ *  === →  fit   (strict equality: x exactly fits y, same type and value)
+ *
  * Variable sigil (rendered as a connecting prefix):
  *  $name    →  lo-name
  *  $someVar →  lo-some·var
@@ -59,6 +64,9 @@ object TokenRenderer {
         "::" to "whence",
         "fn" to "from",
         "=>" to "to",
+        "="   to "by",
+        "=="  to "par",
+        "===" to "fit",
     )
 
     /**

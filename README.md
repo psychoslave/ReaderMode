@@ -123,7 +123,7 @@ The word ends in **y**, whose descending curved tail mirrors the descender
 of `;` itself — the same visual grounding that gives bracket pairs their
 rhyming endings.
 
-> `$one = 1; $two = 2;` → *"lo-one = 1 **ay** lo-two = 2 **ay**"*
+> `$one = 1; $two = 2;` → *"lo-one **by** 1 **ay** lo-two **by** 2 **ay**"*
 
 ### Argument / list separator → "eft"
 
@@ -147,7 +147,7 @@ unambiguously ours.
 
 > `set(key, value)` → *"set **do** key **eft** value **go**"*
 
-> `$array = [one, two, three]` → *"lo-array = **at** one **eft** two **eft** three **ate**"*
+> `$array = [one, two, three]` → *"lo-array **by** **at** one **eft** two **eft** three **ate**"*
 
 ### Member-access operator → "whose"
 
@@ -221,6 +221,35 @@ breadcrumb — *whence* comes this name?
 *Whose* (used for `->`) asks about ownership of an instance member; *whence*
 asks about static origin in the type hierarchy. The two operators serve
 different navigation models, and the two words reflect that distinction.
+
+### Assignment and equality operators → "by" / "par" / "fit"
+
+| Token | Word  | Role |
+|-------|-------|------|
+| `=`   | `by`  | assignment |
+| `==`  | `par` | loose equality — value, with type coercion |
+| `===` | `fit` | strict equality — same value and type |
+
+**`=` — "by".**  
+The variable is defined *by* the right-hand side — the preposition carries the
+mathematical sense of "x, as defined by …".  It avoids the active connotation
+of verbs like *becomes* or *sets*, and sidesteps the timestamp collision of
+*now*, which is ubiquitous in PHP through `Carbon::now()`, `DateTime::now()`,
+and similar helpers.
+
+**`==` — "par".**  
+*Par* is the English noun meaning "equal level" (*on a par with*, *below par*).
+PHP's `==` compares values with type coercion: two things may be at *par* even
+if they are not the same type.
+
+**`===` — "fit".**  
+*Fit* captures the exact, tight nature of PHP's `===` check: both value and
+type must match — like a key fitting a lock.  The contrast with *par* is
+deliberate: being on par allows some flexibility; fitting does not.
+
+> `$result = $a == $b` → *"lo-result **by** lo-a **par** lo-b"*
+
+> `$exact = $type === 'string'` → *"lo-exact **by** lo-type **fit** 'string'"*
 
 ### Arrow-function tokens → "from" / "to"
 

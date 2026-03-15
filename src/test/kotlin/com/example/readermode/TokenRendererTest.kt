@@ -42,6 +42,9 @@ class TokenRendererTest {
         "::, whence",
         "fn, from",
         "=>, to",
+        "=, by",
+        "==, par",
+        "===, fit",
     )
     fun `maps operator tokens to words`(input: String, expected: String) {
         assertEquals(expected, TokenRenderer.wordForOperator(input))
@@ -77,6 +80,9 @@ class TokenRendererTest {
         "whence,            true",
         "from,              true",
         "to,                true",
+        "by,                true",
+        "par,               true",
+        "fit,               true",
         "non-,              true",
         "lo-manager,        true",
         "lo-some·variable,  true",
