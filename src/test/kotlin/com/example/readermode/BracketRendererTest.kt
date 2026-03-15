@@ -1,6 +1,7 @@
 package com.example.readermode
 
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
@@ -16,6 +17,7 @@ class BracketRendererTest {
         "], ate",
         "',', eft",
         ";, ay",
+        "!, non-",
     )
     fun `maps single brackets to words`(input: String, expected: String) {
         assertEquals(expected, BracketRenderer.wordFor(input[0]))
@@ -68,6 +70,7 @@ class BracketRendererTest {
         "ay,                true",
         "whose,             true",
         "whence,            true",
+        "non-,              true",
         "see manager,       true",
         "see some·variable, true",
         "see,               true",
@@ -77,5 +80,13 @@ class BracketRendererTest {
     )
     fun `identifies reader-mode structural placeholders`(input: String, expected: Boolean) {
         assertEquals(expected, BracketRenderer.isReaderModePlaceholder(input.trim('\'')))
+    }
+
+    @Test
+    fun `isConnectingPrefix is true only for prefix-connector tokens`() {
+        assertTrue(BracketRenderer.isConnectingPrefix('!'))
+        assertFalse(BracketRenderer.isConnectingPrefix('('))
+        assertFalse(BracketRenderer.isConnectingPrefix(')'))
+        assertFalse(BracketRenderer.isConnectingPrefix(';'))
     }
 }

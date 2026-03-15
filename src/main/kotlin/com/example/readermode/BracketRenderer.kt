@@ -17,6 +17,9 @@ package com.example.readermode
  * Expression terminator (single-character):
  *  ;  →  ay
  *
+ * Prefix-negation operator (single-character, prefix connector):
+ *  !  →  non-   (no trailing space; chains as non-non-expr for !!)
+ *
  * Member-access operators (multi-character):
  *  ->  →  whose
  *
@@ -42,6 +45,7 @@ object BracketRenderer {
         ']' to "ate",
         ',' to "eft",
         ';' to "ay",
+        '!' to "non-",
     )
 
     /** Multi-character structural operators and their reader-mode words. */
@@ -74,6 +78,14 @@ object BracketRenderer {
 
     fun isOperator(text: String): Boolean = text in OPERATOR_WORDS
     fun wordForOperator(text: String): String? = OPERATOR_WORDS[text]
+
+    /**
+     * Returns true when [c] maps to a prefix-connector word (ends with '-').
+     * The following token must not add a leading space — the hyphen already
+     * connects them — and [c] itself suppresses its own trailing space.
+     * This makes `!!expr` chain as `non-non-expr` instead of `non- non- expr`.
+     */
+    fun isConnectingPrefix(c: Char): Boolean = wordFor(c)?.endsWith("-") == true
 
     /**
      * Returns true when [placeholder] is a reader-mode structural placeholder:

@@ -211,16 +211,46 @@ breadcrumb — *whence* comes this name?
 asks about static origin in the type hierarchy. The two operators serve
 different navigation models, and the two words reflect that distinction.
 
+### Prefix-negation operator → "non-"
+
+The `!` prefix operator is rendered as **non-**:
+
+| Token | Word    |
+|-------|---------|
+| `!`   | `non-`  |
+
+**Rationale — living English prefix.**  
+*Non-* is the standard English prefix for logical, objective negation — the
+exact semantic role of `!` in code.  Unlike *not* (a reserved word in Python,
+Ruby, PHP, and Perl), *non-* carries no collision risk in any mainstream
+language.  It is a highly productive, fully standard prefix in both British and
+American English (Wiktionary lists over 9 000 derived forms), used with nouns,
+adjectives, and adverbs alike, with or without a hyphen depending on register.
+
+**The hyphen is deliberate.**  
+It makes the prefix relationship visually explicit and ensures that chained
+negations — the common boolean-cast idiom `!!$value` — read as a clean chain
+rather than two disconnected words:
+
+> `!$valid` → *"non-see valid"*
+
+> `!!$value` → *"non-non-see value"*
+
+**Spacing rule.**  
+`non-` suppresses its own trailing space (the hyphen is the connector) and
+also suppresses the *leading* space of the immediately following token, so
+chains never render as `non- non- value`.
+
 ### Spacing
 
 Bracket, operator, and terminator folds are padded automatically so that no
 token ever visually glues to its neighbour:
 
 - a **leading space** is inserted when the preceding source character is not
-  whitespace;
+  whitespace and is not itself a connecting-prefix token (such as `!`);
 - a **trailing space** is inserted when the following source character is
-  neither whitespace nor another structural token (which would contribute its
-  own leading space, avoiding doubles).
+  neither whitespace nor another structural token, and the replacement word
+  does not itself end with `-`.
 
 Result for `__construct(SomeClass $instance)`:
 

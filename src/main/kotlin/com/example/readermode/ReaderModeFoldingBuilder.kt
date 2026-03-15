@@ -12,26 +12,28 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement
 /**
  * Folding builder — one fold per token, no merging.
  *
- * Identifiers         → middot placeholder     (quickBrownFox  →  quick·brown·fox)
- * Brackets / braces   → word placeholder       ((  →  do,  {  →  tap)
- * Member-access (->)  → word placeholder       (->  →  whose)
- * Scope-resolution (::) → word placeholder     (::  →  whence)
- * $ variable sigil    → "see" + name           ($someVar  →  see some·var)
+ * Identifiers           → middot placeholder     (quickBrownFox  →  quick·brown·fox)
+ * Brackets / braces     → word placeholder       ((  →  do,  {  →  tap)
+ * Prefix-negation (!)   → prefix placeholder     (!  →  non-)
+ * Member-access (->)    → word placeholder       (->  →  whose)
+ * Scope-resolution (::) → word placeholder       (::  →  whence)
+ * $ variable sigil      → "see" + name           ($someVar  →  see some·var)
  *
  * Bracket and operator placeholders are padded with spaces so adjacent raw text
  * or other folds are never visually glued:
  *  - leading  space when the preceding source character is not whitespace
+ *    AND is not a connecting-prefix token (e.g. !) — so !! chains as non-non-
  *  - trailing space when the following source character is neither whitespace
- *    nor another bracket (brackets add their own leading space, avoiding doubles)
+ *    nor another structural token, AND the word itself does not end with '-'
  *
  * Examples
  *   $obj->makeSomething()
  *     →  [see obj][ whose ][make·something][ do][ go]
  *     =  see obj whose make·something do go
  *
- *   )))
- *     →  [ go][ go][ go]
- *     =  go go go
+ *   !!$ready
+ *     →  [non-][non-][see ready]
+ *     =  non-non-see ready
  */
 class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
 
@@ -52,15 +54,19 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
                 val text = element.text
 
                 when {
-                    // ── Single-character bracket ───────────────────────────────
+                    // ── Single-character bracket / prefix operator ─────────────
                     text.length == 1 && BracketRenderer.isBracket(text[0]) -> {
                         val word  = BracketRenderer.wordFor(text[0])!!
                         val start = element.textRange.startOffset
                         val end   = element.textRange.endOffset
-                        val leading  = if (start > 0 && !source[start - 1].isWhitespace()) " " else ""
+                        val leading  = if (start > 0
+                            && !source[start - 1].isWhitespace()
+                            && !BracketRenderer.isConnectingPrefix(source[start - 1])
+                        ) " " else ""
                         val trailing = if (end < source.length
                             && !source[end].isWhitespace()
                             && !BracketRenderer.isBracket(source[end])
+                            && !word.endsWith("-")
                         ) " " else ""
                         descriptors.add(
                             FoldingDescriptor(element.node, element.textRange, null, leading + word + trailing)
@@ -72,10 +78,14 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
                         val word  = BracketRenderer.wordForOperator(text)!!
                         val start = element.textRange.startOffset
                         val end   = element.textRange.endOffset
-                        val leading  = if (start > 0 && !source[start - 1].isWhitespace()) " " else ""
+                        val leading  = if (start > 0
+                            && !source[start - 1].isWhitespace()
+                            && !BracketRenderer.isConnectingPrefix(source[start - 1])
+                        ) " " else ""
                         val trailing = if (end < source.length
                             && !source[end].isWhitespace()
                             && !BracketRenderer.isBracket(source[end])
+                            && !word.endsWith("-")
                         ) " " else ""
                         descriptors.add(
                             FoldingDescriptor(element.node, element.textRange, null, leading + word + trailing)
