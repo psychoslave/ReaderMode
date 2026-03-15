@@ -14,6 +14,7 @@ class BracketRendererTest {
         "), go",
         "[, at",
         "], ate",
+        "',', eft",
         ";, ay",
     )
     fun `maps single brackets to words`(input: String, expected: String) {
@@ -62,6 +63,7 @@ class BracketRendererTest {
         "tap,               true",
         "at,                true",
         "ate,               true",
+        "eft,               true",
         "ay,                true",
         "whose,             true",
         "see manager,       true",

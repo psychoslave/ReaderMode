@@ -114,6 +114,30 @@ with **s** (its struck-S shape) and bracket pairs to rhyming endings.
 
 > `$one = 1; $two = 2;` → *"see one = 1 **ay** see two = 2 **ay**"*
 
+### Argument / list separator → "eft"
+
+The `,` separator is rendered as **eft**:
+
+| Token | Word  |
+|-------|-------|
+| `,`   | `eft` |
+
+**Rationale.**  
+*Eft* is an obsolete English adverb meaning **"again; afterwards"** — precisely
+what a comma does: it announces that another item follows.  After each
+argument, each list element, each clause: *eft*, here comes the next one.
+
+The word was chosen over more obvious candidates (`and`, `then`, `next`,
+`or`) because all of those already carry heavy meaning in programming
+languages as operators or keywords, creating a risk of semantic collision
+when reading code aloud.  *Eft*'s very rarity is a feature: it sits
+outside the active vocabulary of any mainstream language, leaving it
+unambiguously ours.
+
+> `fob(gob, hob)` → *"fob **do** gob **eft** hob **go**"*
+
+> `$array = [one, two, three]` → *"see array = **at** one **eft** two **eft** three **ate**"*
+
 ### Member-access operator → "whose"
 
 The `->` operator (PHP object member access) is rendered as **whose**:

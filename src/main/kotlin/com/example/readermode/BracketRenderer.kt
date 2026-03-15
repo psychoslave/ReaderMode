@@ -11,6 +11,9 @@ package com.example.readermode
  * Subscript brackets (single-character):
  *  [  →  at      ]  →  ate
  *
+ * Argument / list separator (single-character):
+ *  ,  →  eft
+ *
  * Expression terminator (single-character):
  *  ;  →  ay
  *
@@ -34,6 +37,7 @@ object BracketRenderer {
         ')' to "go",
         '[' to "at",
         ']' to "ate",
+        ',' to "eft",
         ';' to "ay",
     )
 
