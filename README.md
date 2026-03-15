@@ -189,6 +189,28 @@ A function call like `__construct(SomeClass $instance)` reads aloud as:
 A class body opening `SomeClass {` reads as:
 > *"some·class **tap**"*
 
+### Scope-resolution operator → "whence"
+
+The `::` operator (namespace / class scope resolution) is rendered as **whence**:
+
+| Token | Word     |
+|-------|----------|
+| `::`  | `whence` |
+
+**Rationale — provenance adverb.**  
+*Whence* is the English adverb meaning **"from where"** or **"from which
+place"**. That is exactly what `::` expresses: each segment in a
+`Namespace::SubNamespace::Class` chain names the place *from which* the next
+name is drawn. Reading left to right, every `::` is a step back up the
+breadcrumb — *whence* comes this name?
+
+> `Psr\Log::Logger::create()` → *"psr·log **whence** logger **whence** create **do** **go**"*
+
+**Contrast with `whose`.**  
+*Whose* (used for `->`) asks about ownership of an instance member; *whence*
+asks about static origin in the type hierarchy. The two operators serve
+different navigation models, and the two words reflect that distinction.
+
 ### Spacing
 
 Bracket, operator, and terminator folds are padded automatically so that no

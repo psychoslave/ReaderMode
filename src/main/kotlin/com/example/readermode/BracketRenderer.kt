@@ -20,6 +20,9 @@ package com.example.readermode
  * Member-access operators (multi-character):
  *  ->  →  whose
  *
+ * Scope-resolution operator (multi-character):
+ *  ::  →  whence
+ *
  * Variable sigil:
  *  $name     →  see name
  *  $someVar  →  see some·var
@@ -44,6 +47,7 @@ object BracketRenderer {
     /** Multi-character structural operators and their reader-mode words. */
     private val OPERATOR_WORDS = mapOf(
         "->" to "whose",
+        "::" to "whence",
     )
 
     /**

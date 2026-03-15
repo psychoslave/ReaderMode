@@ -37,6 +37,7 @@ class BracketRendererTest {
     @ParameterizedTest(name = "{0} → {1}")
     @CsvSource(
         "->, whose",
+        "::, whence",
     )
     fun `maps operator tokens to words`(input: String, expected: String) {
         assertEquals(expected, BracketRenderer.wordForOperator(input))
@@ -66,6 +67,7 @@ class BracketRendererTest {
         "eft,               true",
         "ay,                true",
         "whose,             true",
+        "whence,            true",
         "see manager,       true",
         "see some·variable, true",
         "see,               true",

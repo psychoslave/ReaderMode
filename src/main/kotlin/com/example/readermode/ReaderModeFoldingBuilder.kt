@@ -15,6 +15,7 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement
  * Identifiers         → middot placeholder     (quickBrownFox  →  quick·brown·fox)
  * Brackets / braces   → word placeholder       ((  →  do,  {  →  tap)
  * Member-access (->)  → word placeholder       (->  →  whose)
+ * Scope-resolution (::) → word placeholder     (::  →  whence)
  * $ variable sigil    → "see" + name           ($someVar  →  see some·var)
  *
  * Bracket and operator placeholders are padded with spaces so adjacent raw text
