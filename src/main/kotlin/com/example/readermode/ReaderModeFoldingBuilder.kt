@@ -17,7 +17,7 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement
  * Prefix-negation (!)   → prefix placeholder     (!  →  non-)
  * Member-access (->)    → word placeholder       (->  →  whose)
  * Scope-resolution (::) → word placeholder       (::  →  whence)
- * $ variable sigil      → "see" + name           ($someVar  →  see some·var)
+ * $ variable sigil      → "lo-" prefix           ($someVar  →  lo-some·var, $$v  →  lo-lo-v)
  *
  * Bracket and operator placeholders are padded with spaces so adjacent raw text
  * or other folds are never visually glued:
@@ -28,12 +28,12 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement
  *
  * Examples
  *   $obj->makeSomething()
- *     →  [see obj][ whose ][make·something][ do][ go]
- *     =  see obj whose make·something do go
+ *     →  [lo-obj][ whose ][make·something][ do][ go]
+ *     =  lo-obj whose make·something do go
  *
  *   !!$ready
- *     →  [non-][non-][see ready]
- *     =  non-non-see ready
+ *     →  [non-][non-][lo-ready]
+ *     =  non-non-lo-ready
  */
 class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
 
@@ -92,15 +92,14 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
                         )
                     }
 
-                    // ── $ variable sigil (e.g. $manager, $someVariable) ───────
+                    // ── $ variable sigil (e.g. $manager, $$someVar) ───────────
                     text.length > 1 && text[0] == '$' -> {
-                        val name     = text.substring(1)
+                        val sigils   = text.takeWhile { it == '$' }.length
+                        val name     = text.substring(sigils)
                         val nameForm = MiddotConverter.convert(name) ?: name
+                        val prefix   = BracketRenderer.SIGIL_PREFIX.repeat(sigils)
                         descriptors.add(
-                            FoldingDescriptor(
-                                element.node, element.textRange, null,
-                                "${BracketRenderer.SIGIL_WORD} $nameForm"
-                            )
+                            FoldingDescriptor(element.node, element.textRange, null, prefix + nameForm)
                         )
                     }
 
@@ -123,8 +122,9 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
         if (text.length == 1) BracketRenderer.wordFor(text[0])?.let { return it }
         BracketRenderer.wordForOperator(text)?.let { return it }
         if (text.length > 1 && text[0] == '$') {
-            val name = text.substring(1)
-            return "${BracketRenderer.SIGIL_WORD} ${MiddotConverter.convert(name) ?: name}"
+            val sigils = text.takeWhile { it == '$' }.length
+            val name   = text.substring(sigils)
+            return BracketRenderer.SIGIL_PREFIX.repeat(sigils) + (MiddotConverter.convert(name) ?: name)
         }
         return MiddotConverter.convert(text) ?: text
     }

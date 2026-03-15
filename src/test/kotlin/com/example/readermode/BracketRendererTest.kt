@@ -47,15 +47,18 @@ class BracketRendererTest {
 
     @ParameterizedTest(name = "sigil rendering: {0} → {1}")
     @CsvSource(
-        "\$manager,        see manager",
-        "\$someVariable,   see some·variable",
-        "\$HTMLParser,     see html·parser",
-        "\$this,           see this",
+        "\$manager,         lo-manager",
+        "\$someVariable,    lo-some·variable",
+        "\$HTMLParser,      lo-html·parser",
+        "\$this,            lo-this",
+        "\$\$variable,      lo-lo-variable",
     )
     fun `renders dollar-sigil variables`(rawToken: String, expected: String) {
-        val name     = rawToken.removePrefix("$")
+        val sigils   = rawToken.takeWhile { it == '$' }.length
+        val name     = rawToken.substring(sigils)
         val nameForm = MiddotConverter.convert(name) ?: name
-        assertEquals(expected, "${BracketRenderer.SIGIL_WORD} $nameForm")
+        val prefix   = BracketRenderer.SIGIL_PREFIX.repeat(sigils)
+        assertEquals(expected.trim(), prefix + nameForm)
     }
 
     @ParameterizedTest(name = "isReaderModePlaceholder({0}) = {1}")
@@ -71,9 +74,9 @@ class BracketRendererTest {
         "whose,             true",
         "whence,            true",
         "non-,              true",
-        "see manager,       true",
-        "see some·variable, true",
-        "see,               true",
+        "lo-manager,        true",
+        "lo-some·variable,  true",
+        "lo-lo-variable,    true",
         "quick·brown,       false",
         "hello,             false",
         "'',                false",

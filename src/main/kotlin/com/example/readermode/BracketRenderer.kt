@@ -26,9 +26,10 @@ package com.example.readermode
  * Scope-resolution operator (multi-character):
  *  ::  →  whence
  *
- * Variable sigil:
- *  $name     →  see name
- *  $someVar  →  see some·var
+ * Variable sigil (rendered as a connecting prefix):
+ *  $name    →  lo-name
+ *  $someVar →  lo-some·var
+ *  $$name   →  lo-lo-name   (PHP variable variables)
  */
 object BracketRenderer {
 
@@ -55,18 +56,18 @@ object BracketRenderer {
     )
 
     /**
-     * Word used to render the `$` variable sigil.
+     * Prefix used to render the `$` variable sigil.
      *
-     * "see" is a complete English word (no apocope) with several converging
-     * meanings that all fit the role of a variable sigil:
-     *  - **Deictic interjection** — "See!" points at / indicates something,
-     *    mirroring the sigil's role of marking a name as a reference to a value.
-     *  - **Ecclesiastical noun** — a "see" is the seat where autonomous power
-     *    is exercised; by metaphor, the locus at which a value resides and acts
-     *    (cf. a memory location).
-     *  - Starts with **s**, echoing the struck-S shape of `$` itself.
+     * "lo" is a short English interjection meaning "look, here is" — directing
+     * attention to the named thing, exactly as a sigil marks a name as a
+     * reference to a value.  The trailing hyphen makes the prefix nature
+     * explicit and connects directly to the identifier: `$variable` →
+     * `lo-variable`.
+     *
+     * For PHP variable variables (`$$name`), the sigils chain naturally:
+     * `$$variable` → `lo-lo-variable`.
      */
-    const val SIGIL_WORD = "see"
+    const val SIGIL_PREFIX = "lo-"
 
     private val WORDS_SET: Set<String> = (BRACKET_WORDS.values + OPERATOR_WORDS.values).toSet()
 
@@ -89,15 +90,15 @@ object BracketRenderer {
 
     /**
      * Returns true when [placeholder] is a reader-mode structural placeholder:
+     *  - sigil folds: one or more `lo-` prefixes followed by an identifier
      *  - bracket/operator words ("do", "go", "whose", etc.)
-     *  - sigil fold starting with [SIGIL_WORD]
      *
      * Used by [ToggleReaderModeAction] to identify which folds belong to us.
      */
     fun isReaderModePlaceholder(placeholder: String): Boolean {
         val trimmed = placeholder.trim()
         return when {
-            trimmed == SIGIL_WORD || trimmed.startsWith("$SIGIL_WORD ") -> true
+            trimmed.matches(Regex("(${Regex.escape(SIGIL_PREFIX)})+\\S+")) -> true
             else -> trimmed.isNotEmpty()
                 && trimmed.split(' ').filter { it.isNotEmpty() }.all { it in WORDS_SET }
         }

@@ -32,32 +32,43 @@ The middle dot (U+00B7 `·`) was chosen because it is a genuine word-separator
 glyph (used in Catalan orthography, ancient Greek manuscripts, etc.), visually
 lighter than a hyphen or underscore, and unambiguous in code contexts.
 
-### Variable sigil → "see"
+### Variable sigil → "lo-"
 
-The `$` prefix on PHP variables is rendered as **see**:
+The `$` prefix on PHP variables is rendered as the connecting prefix **lo-**:
 
-| Source            | Reader view            |
-|-------------------|------------------------|
-| `$variable`       | `see variable`         |
-| `$someInstance`   | `see some·instance`    |
-| `$this`           | `see this`             |
+| Source            | Reader view              |
+|-------------------|--------------------------|
+| `$variable`       | `lo-variable`            |
+| `$someInstance`   | `lo-some·instance`       |
+| `$this`           | `lo-this`                |
+| `$$variable`      | `lo-lo-variable`         |
 
-**Rationale — deictic interjection.**  
-In English, "See!" is used to point at or draw attention to something — the
-exact gesture a sigil performs: it marks a name as a reference to a value.
-`$variable` reads *"see variable"*: look here — variable.
+**Rationale — deictic prefix.**  
+"Lo!" is a short English interjection meaning *look, here is* — directing
+attention to whatever follows, which is precisely the role of `$`: it marks
+a name as a reference to a value, pointing you at the thing.  As a prefix
+with a trailing hyphen it connects directly to the identifier without a
+separating space: `$variable` → `lo-variable`.
 
-**Rationale — locus noun.**  
-A "see" (ecclesiastical) is the seat where autonomous authority is exercised.
-By metaphor: a variable is the locus at which a value resides and from which
-it acts — the place the name governs.
+**Why `lo-` and not `see-` or `hither-`.**  
+`see` was the previous rendering as a standalone word.  Switching to a
+hyphenated prefix changes its character: `see-variable` reads as a
+compound noun rather than a deictic gesture, and "see" carries too many
+unrelated meanings (ecclesiastical see, the verb *to see*) to feel
+unambiguous as a prefix.  *Hither-* would be the semantically ideal choice
+— a directional adverb meaning "toward here", which maps perfectly to the
+idea of a sigil pointing you at a memory location — but at six characters
+it is twice the width of `lo-` and adds bulk in dense code.  `lo-` is the
+shortest unambiguous English word with the same deictic force, with no
+competing meanings and no collision risk in any mainstream language.
 
-**Phonetic fit.**  
-Like every other structural word in the vocabulary, "see" starts with **s** —
-echoing the struck-S shape of `$` itself. It is a complete English word with
-no apocope, three letters, and reads cleanly in context:
+**Variable variables chain naturally.**  
+For PHP's `$$name` construct (a variable whose name is itself stored in
+another variable), the sigils simply repeat:
 
-> `$this->methodName()` → *"**see** this **whose** method·name **do** **go**"*
+> `$this->methodName()` → *"**lo-**this **whose** method·name **do** **go**"*
+
+> `$$variable` → *"**lo-lo-**variable"*
 
 ### Bracket tokens → English words
 
@@ -90,9 +101,9 @@ metaphor: parsers eat input, lookups consume a key to produce a value.
 The phonetic contrast is unambiguous: `at` /æt/ vs `ate` /eɪt/ — no
 collision when reading code aloud.
 
-> `$array[index]` → *"see array **at** index **ate**"*
+> `$array[index]` → *"lo-array **at** index **ate**"*
 
-> `$matrix[row][lat]` → *"see matrix **at** row **ate** **at** lat **ate**"*
+> `$matrix[row][lat]` → *"lo-matrix **at** row **ate** **at** lat **ate**"*
 
 ### Expression terminator → "ay"
 
@@ -109,10 +120,10 @@ moves on. Each statement ends with a nod: *ay*.
 
 **Rationale — shape.**  
 The word ends in **y**, whose descending curved tail mirrors the descender
-of `;` itself — the same visual grounding that led `$` to words starting
-with **s** (its struck-S shape) and bracket pairs to rhyming endings.
+of `;` itself — the same visual grounding that gives bracket pairs their
+rhyming endings.
 
-> `$one = 1; $two = 2;` → *"see one = 1 **ay** see two = 2 **ay**"*
+> `$one = 1; $two = 2;` → *"lo-one = 1 **ay** lo-two = 2 **ay**"*
 
 ### Argument / list separator → "eft"
 
@@ -136,7 +147,7 @@ unambiguously ours.
 
 > `set(key, value)` → *"set **do** key **eft** value **go**"*
 
-> `$array = [one, two, three]` → *"see array = **at** one **eft** two **eft** three **ate**"*
+> `$array = [one, two, three]` → *"lo-array = **at** one **eft** two **eft** three **ate**"*
 
 ### Member-access operator → "whose"
 
@@ -149,13 +160,13 @@ The `->` operator (PHP object member access) is rendered as **whose**:
 **Rationale — semantic ownership.**  
 `->` denotes that a property or method belongs to an object. *Whose* is the
 English possessive interrogative — the exact word we use to ask about
-ownership. `$instance->property` reads *"see instance whose property"*, which maps cleanly
+ownership. `$instance->property` reads *"lo-instance whose property"*, which maps cleanly
 onto the mental model: we are accessing something that the object owns.
 
 **Rationale — prosodic flow.**  
 The word slots naturally into spoken code:
 
-> `$variable->methodName()` → *"**see** variable **whose** method·name **do** **go**"*
+> `$variable->methodName()` → *"**lo-**variable **whose** method·name **do** **go**"*
 
 Possession and invocation read as a natural phrase rather than a symbol
 interrupt.
@@ -184,7 +195,7 @@ actually *do* in code:
 
 **Prosody when vocalised.**  
 A function call like `__construct(SomeClass $instance)` reads aloud as:
-> *"underscore underscore construct **do** some·class **see** instance **go**"*
+> *"underscore underscore construct **do** some·class **lo-**instance **go**"*
 
 A class body opening `SomeClass {` reads as:
 > *"some·class **tap**"*
@@ -232,9 +243,9 @@ It makes the prefix relationship visually explicit and ensures that chained
 negations — the common boolean-cast idiom `!!$value` — read as a clean chain
 rather than two disconnected words:
 
-> `!$valid` → *"non-see valid"*
+> `!$valid` → *"non-lo-valid"*
 
-> `!!$value` → *"non-non-see value"*
+> `!!$value` → *"non-non-lo-value"*
 
 **Spacing rule.**  
 `non-` suppresses its own trailing space (the hyphen is the connector) and
@@ -255,7 +266,7 @@ token ever visually glues to its neighbour:
 Result for `__construct(SomeClass $instance)`:
 
 ```
-__construct do some·class see instance go
+__construct do some·class lo-instance go
 ```
 
 ---
