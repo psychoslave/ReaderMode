@@ -31,9 +31,18 @@ package com.example.readermode
  *  =>  →  to      (arrow-function body / associative-array separator)
  *
  * Assignment and equality operators:
- *  =   →  by    (assignment: x defined by value)
+ *  =   →  here  (assignment: x, here, value — deictic presenter)
  *  ==  →  par   (loose equality: x on par with y, value with coercion)
  *  === →  fit   (strict equality: x exactly fits y, same type and value)
+ *
+ * Ternary operator (context-dependent; rendered as a W0 / W1 / W2 triplet):
+ *  condition ? trueExpr : falseExpr
+ *    →  should condition thereupon trueExpr otherwise falseExpr
+ *  ?  →  thereupon   (replaces the token; introduces the true branch)
+ *  :  →  otherwise   (replaces the token; introduces the false branch)
+ *  The "should" prefix (W0) is NOT a token replacement — it is injected
+ *  before the condition's first leaf by a pre-scan phase in the folding
+ *  builder, because the condition precedes "?" in document order.
  *
  * Variable sigil (rendered as a connecting prefix):
  *  $name    →  lo-name
@@ -64,7 +73,7 @@ object TokenRenderer {
         "::" to "whence",
         "fn" to "from",
         "=>" to "to",
-        "="   to "by",
+        "="   to "here",
         "=="  to "par",
         "===" to "fit",
     )
@@ -82,6 +91,17 @@ object TokenRenderer {
      * `$$variable` → `lo-lo-variable`.
      */
     const val SIGIL_PREFIX = "lo-"
+
+    /**
+     * Words for the ternary operator `condition ? trueExpr : falseExpr`.
+     *
+     *  W0 — injected before the condition's first token by the pre-scan phase.
+     *  W1 — replaces the `?` token.
+     *  W2 — replaces the `:` token.
+     */
+    const val TERNARY_W0 = "should"
+    const val TERNARY_W1 = "thereupon"
+    const val TERNARY_W2 = "otherwise"
 
     private val WORDS_SET: Set<String> = (BRACKET_WORDS.values + OPERATOR_WORDS.values).toSet()
 
@@ -106,6 +126,8 @@ object TokenRenderer {
      * Returns true when [placeholder] is a reader-mode structural placeholder:
      *  - sigil folds: one or more `lo-` prefixes followed by an identifier
      *  - bracket/operator words ("do", "go", "whose", etc.)
+     *  - ternary words: "thereupon", "otherwise", or any placeholder whose
+     *    first word is "should" (the W0 prefix injected before a condition)
      *
      * Used by [ToggleReaderModeAction] to identify which folds belong to us.
      */
@@ -113,6 +135,8 @@ object TokenRenderer {
         val trimmed = placeholder.trim()
         return when {
             trimmed.matches(Regex("(${Regex.escape(SIGIL_PREFIX)})+\\S+")) -> true
+            trimmed == TERNARY_W1 || trimmed == TERNARY_W2 -> true
+            trimmed.startsWith("$TERNARY_W0 ") -> true
             else -> trimmed.isNotEmpty()
                 && trimmed.split(' ').filter { it.isNotEmpty() }.all { it in WORDS_SET }
         }

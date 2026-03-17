@@ -123,7 +123,7 @@ The word ends in **y**, whose descending curved tail mirrors the descender
 of `;` itself — the same visual grounding that gives bracket pairs their
 rhyming endings.
 
-> `$one = 1; $two = 2;` → *"lo-one **by** 1 **ay** lo-two **by** 2 **ay**"*
+> `$one = 1; $two = 2;` → *"lo-one **here** 1 **ay** lo-two **here** 2 **ay**"*
 
 ### Argument / list separator → "eft"
 
@@ -147,7 +147,7 @@ unambiguously ours.
 
 > `set(key, value)` → *"set **do** key **eft** value **go**"*
 
-> `$array = [one, two, three]` → *"lo-array **by** **at** one **eft** two **eft** three **ate**"*
+> `$array = [one, two, three]` → *"lo-array **here** **at** one **eft** two **eft** three **ate**"*
 
 ### Member-access operator → "whose"
 
@@ -222,20 +222,97 @@ breadcrumb — *whence* comes this name?
 asks about static origin in the type hierarchy. The two operators serve
 different navigation models, and the two words reflect that distinction.
 
-### Assignment and equality operators → "by" / "par" / "fit"
+### Assignment and equality operators → "here" / "par" / "fit"
 
-| Token | Word  | Role |
-|-------|-------|------|
-| `=`   | `by`  | assignment |
-| `==`  | `par` | loose equality — value, with type coercion |
-| `===` | `fit` | strict equality — same value and type |
+| Token | Word   | Role |
+|-------|--------|------|
+| `=`   | `here` | assignment |
+| `==`  | `par`  | loose equality — value, with type coercion |
+| `===` | `fit`  | strict equality — same value and type |
 
-**`=` — "by".**  
-The variable is defined *by* the right-hand side — the preposition carries the
-mathematical sense of "x, as defined by …".  It avoids the active connotation
-of verbs like *becomes* or *sets*, and sidesteps the timestamp collision of
-*now*, which is ubiquitous in PHP through `Carbon::now()`, `DateTime::now()`,
-and similar helpers.
+**`=` — "here".**  
+*Here* is a deictic adverb — its function is to point: *here is the thing*.
+Positioned between a variable name and its assigned value, it acts as a
+natural presenter: `lo-result here lo-a` reads as *"lo-result — here —
+lo-a"*, introducing the right-hand side to the left-hand name.
+
+**Why deictic?**  
+Assignment is fundamentally an act of presentation: a name is bound to a
+value that is *here*, now available under that name.  The deictic reading —
+*"lo-result: here, lo-a"* — matches that act directly.  It is also
+semantically of a piece with `lo-`: the README grounds `lo-` in "Lo! —
+*look, here is*", so *here* and `lo-` operate with the same deictic force,
+one naming the container, the other presenting the content.
+
+**Ellipsis is optional, not required.**  
+Most candidates for this slot only work if you allow an implied word.  *Here*
+works both with and without ellipsis:
+
+- zero ellipsis: *"lo-result, here, lo-a"* — the deictic points at the value,
+  self-sufficiently
+- with ellipsis: *"lo-result here \[becoming\] lo-a"*, *"lo-result here
+  \[assigned\] lo-a"*, *"lo-result here \[set to\] lo-a"*
+
+Because the ellipsis is optional and the possible implied verbs are multiple,
+the word does not lock the reader into a single philosophical framing of
+what `=` means — binding a name, mutating a slot, defining a constant.
+*Here* is neutral enough to accommodate all of them.
+
+**Candidates considered and rejected.**
+
+*"by"* — the previous rendering.  The preposition carries genuine
+mathematical precision ("x, as defined by y") and costs only 2 characters.
+Its weakness is that it never reaches zero-ellipsis readability: as a
+standalone infix between two noun phrases, "by" always needs the implied
+*"defined"* to parse as prose.  Read silently it passes; read aloud the
+listener must supply the missing verb every time.  *Here* makes the same
+claim with no debt.
+
+*"now"* — the most immediate temporal adverb for assignment (*"x is now
+y"*), and it flows perfectly as prose.  Rejected because `now` is ubiquitous
+in PHP as a method name: `Carbon::now()`, `DateTime::now()`, and dozens of
+framework equivalents would create a constant semantic collision between
+the assignment token and a method identifier when reading code aloud.
+
+*"gets"* / *"becomes"* / *"sets"* — active verbs that flow naturally but
+carry an agency connotation, suggesting the variable is an actor performing
+an action rather than a passive name receiving a value.  They also carry
+keyword or collision risk in various target languages.
+
+*"is"* — the most natural spoken word for assignment (*"x is y"*) and the
+cleanest prose.  Unusable: a reserved keyword in Python, Ruby, and several
+other languages.
+
+*"soaks"* — the absorption metaphor is directionally correct (the variable
+soaks up the value), but the word is an inflected verb (third-person singular
+present), creating a grammatical mismatch in the infix slot.  At 5 characters
+it is longer than desirable, and the metaphor collapses outside liquid
+contexts: *"lo-count soaks 42"* evokes nothing.
+
+*"blot"* — shares the absorption sense but its dominant semantic field is
+damage and erasure: *a blot on your record*, *to blot out a word*.
+"Blot out" specifically means to obliterate — the exact opposite of
+assignment — and that reading would compete with the intended one on every
+occurrence.
+
+*"thus"* / *"hence"* — conjunctive adverbs that work well in mathematical
+proof prose (*"let x; thus, y"*).  Their structural problem is that
+conjunctive adverbs connect *clauses*, not noun phrases.  `lo-x thus lo-a`
+reads as two clauses glued together without punctuation — the same ellipsis
+debt as "by", but at a higher grammatical level.
+
+*"hither"* — the directional adverb meaning *"to this place, to here"* —
+is the most semantically precise of the archaic candidates: the value travels
+*hither* to the variable.  It sits naturally in the literary register already
+established by *whence* (`::`) and *whose* (`->`), and its directionality is
+unambiguous.  It was rejected on length: at 6 characters it is half again the
+size of *here* and adds visible bulk in dense assignment chains.  The same
+argument against *hither-* as a prefix for `lo-` applies equally here.
+
+*"thence"* — "from that place", pointing at the right-hand side as the
+source.  Directionally interesting but archaic and 6 characters; it also
+reads as going *away from* a place rather than arriving *at* one, which
+inverts the intuitive direction of assignment.
 
 **`==` — "par".**  
 *Par* is the English noun meaning "equal level" (*on a par with*, *below par*).
@@ -247,9 +324,117 @@ if they are not the same type.
 type must match — like a key fitting a lock.  The contrast with *par* is
 deliberate: being on par allows some flexibility; fitting does not.
 
-> `$result = $a == $b` → *"lo-result **by** lo-a **par** lo-b"*
+> `$result = $a == $b` → *"lo-result **here** lo-a **par** lo-b"*
 
-> `$exact = $type === 'string'` → *"lo-exact **by** lo-type **fit** 'string'"*
+> `$exact = $type === 'string'` → *"lo-exact **here** lo-type **fit** 'string'"*
+
+### Ternary operator → "should … thereupon … otherwise …"
+
+The `? :` ternary is rendered as a three-part structure:
+
+| Token | Word        | Role |
+|-------|-------------|------|
+| *(prefix)* | `should`    | W0 — prefixes the condition |
+| `?`   | `thereupon` | W1 — introduces the true branch |
+| `:`   | `otherwise` | W2 — introduces the false branch |
+
+> `$result = $count > 0 ? $value : $default`  
+> → *"lo-result **here** **should** lo-count **par** 0 **thereupon** lo-value **otherwise** lo-default"*
+
+**Rationale — three words, not two.**  
+The most natural English correlative for binary alternation is *either … or …*.
+That two-word pair was the first candidate considered, but it has a critical
+flaw: the project's own rationale for `eft` (`,`) explicitly lists `or` as a
+collision risk — it carries too much weight as a boolean operator in every
+target language.  Adding W0 resolves this completely.  Once the condition is
+framed by a conditional word, the third word can freely be *otherwise* (the
+canonical English fallback) without any ambiguity, because no listener hears a
+bare *"otherwise"* and mistakes it for a boolean operator.
+
+**`?` — W0 — "should".**  
+*Should* is a conditional auxiliary — purely syncategorematic, no referential
+content of its own.  "Should condition hold…" is formal but natural English,
+and exactly the right framing: it marks what follows as a test whose outcome
+determines which branch is taken.  It has no keyword status in PHP, Java, or
+Kotlin, and no collision risk as a method or variable name in typical code.
+At 6 characters it is the longest of the three words; it earns that length
+by doing the heaviest semantic work — framing the entire expression as a
+conditional.
+
+**W0 is not a token replacement.**  
+*Should* cannot be handled by the simple text-keyed `OPERATOR_WORDS` map,
+because the condition appears *before* the `?` token in source order.  A
+single left-to-right leaf-visitor would encounter the condition's first token
+before knowing it is part of a ternary.  The folding builder therefore runs in
+**two phases**: a pre-scan (Phase 1) finds every `?` that belongs to a ternary
+expression, walks back to the first significant leaf of its condition subtree,
+and records that offset; the main fold-building pass (Phase 2) then injects
+*"should "* as a prefix whenever it encounters a leaf at a recorded offset.
+Ternary context is detected by inspecting the parent PSI class name
+(`"Ternary"` or `"Conditional"` in the name), avoiding hard compile-time
+dependencies on language-plugin classes.
+
+**`?` → W1 — "thereupon".**  
+*Thereupon* means *"as a direct consequence of that; immediately upon that"* —
+the exact relationship between a satisfied condition and its true branch.
+It belongs to the same Old English prepositional-adverb family as *whence*
+(`::`) and *thence*: the `there-` root signals "upon that", and the whole word
+says "the following is what happens upon the condition being met".  Its
+9 characters are justified by semantic precision: it is unambiguously a
+consequence marker, not a conjunction, not a modal, and carries no collision
+risk anywhere.
+
+**`:` → W2 — "otherwise".**  
+*Otherwise* is the canonical English word for a conditional fallback — *"in
+other circumstances; if not"*.  It is the prose counterpart of the programming
+keyword `else`, carries no keyword status in any target language as a standalone
+word, and is immediately understood without any specialist vocabulary.
+Its 9 characters mirror those of *thereupon*, giving the two branch markers
+equal visual weight in the rendered output.
+
+**Nested ternaries.**  
+The three words are fully distinct from one another and from every other token
+word in the system.  This makes nested ternaries parseable by structural
+matching: each *should* pairs with exactly one *thereupon* and one *otherwise*,
+functioning like named brackets.
+
+Right-nested depth 2:
+> `$a ? ($b ? 'both' : 'only·a') : 'neither'`  
+> → *"**should** lo-a **thereupon** **should** lo-b **thereupon** 'both' **otherwise** 'only·a' **otherwise** 'neither'"*
+
+Compare with the `be / then / or` triplet (the shortest serious alternative):
+> *"be lo-a then be lo-b then 'both' or 'only·a' or 'neither'"*
+
+In the `be/then/or` version, the two trailing `or` tokens are visually
+indistinguishable from a boolean OR chain (`'both' or 'only·a' or 'neither'`).
+In the `should/thereupon/otherwise` version, *otherwise otherwise* reads as two
+closing structural markers — the nesting is traceable.
+
+**Candidates considered and rejected.**
+
+*`either / or`* (two words, no W0) — the most natural English correlative for
+binary alternation.  Rejected because `or` appears alone and unframed between
+the two branches: in nested ternaries, repeated `or` is indistinguishable from
+boolean OR chains.  The "or" collision was also flagged in the rationale for
+`eft` (`,`).
+
+*`aye / nay`* — collision-free and phonetically paired.  Rejected for two
+reasons: the archaic nautical register ("all in favour say aye") is too
+far-fetched for a conditional expression, and `aye` (/aɪ/) sits too close to
+`ay` (/eɪ/, used for `;`) for comfortable audio disambiguation.
+
+*`be / then / or`* and *`say / then / or`* — shorter triplets (2+4+2 and
+3+4+2 chars respectively).  Both retain `or` as W2, which collapses in nested
+ternaries as described above.  *Be* is archaic and ambiguous without its
+complement "it"; *say* is a content verb, not purely syncategorematic.
+
+*`should / then / or`* — correct W0, but still uses `or` as W2.  The nesting
+problem persists.
+
+*`whenever / settle / otherwise`* — correct register for W0 and W2, but
+*whenever* (8 chars) implies temporal recurrence rather than a single
+conditional test, and *settle* (6 chars) is a content verb, not a function
+word.
 
 ### Arrow-function tokens → "from" / "to"
 
@@ -339,8 +524,13 @@ Folds:    [make·something] [ do ]  [arguments] [ go]
 Reads:     make·something   do     arguments    go
 ```
 
-The folding builder (`ReaderModeFoldingBuilder`) is a single-pass
-`PsiRecursiveElementVisitor` over all leaf PSI elements.  It is registered as
+The folding builder (`ReaderModeFoldingBuilder`) runs in **two phases** for
+each file.  Phase 1 is a lightweight pre-scan that identifies the first token
+of every ternary condition — necessary because the condition precedes `?` in
+document order and cannot be annotated during a single left-to-right pass.
+Phase 2 is the main `PsiRecursiveElementVisitor` over all leaf PSI elements,
+which creates fold descriptors and injects the ternary W0 prefix ("should ")
+wherever Phase 1 flagged a condition start.  It is registered as
 a `lang.foldingBuilder` extension for each supported language via optional
 `<depends>` entries in `plugin.xml`, so it degrades gracefully when a language
 plugin is absent.

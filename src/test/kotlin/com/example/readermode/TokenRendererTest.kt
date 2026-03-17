@@ -42,7 +42,7 @@ class TokenRendererTest {
         "::, whence",
         "fn, from",
         "=>, to",
-        "=, by",
+        "=, here",
         "==, par",
         "===, fit",
     )
@@ -80,16 +80,23 @@ class TokenRendererTest {
         "whence,            true",
         "from,              true",
         "to,                true",
-        "by,                true",
+        "here,              true",
         "par,               true",
         "fit,               true",
         "non-,              true",
         "lo-manager,        true",
         "lo-some·variable,  true",
-        "lo-lo-variable,    true",
-        "quick·brown,       false",
-        "hello,             false",
-        "'',                false",
+        "lo-lo-variable,        true",
+        // ternary words
+        "thereupon,             true",
+        "otherwise,             true",
+        "'should lo-manager',   true",
+        "'should do',           true",
+        "'should some·thing',   true",
+        // non-reader-mode
+        "quick·brown,           false",
+        "hello,                 false",
+        "'',                    false",
     )
     fun `identifies reader-mode structural placeholders`(input: String, expected: Boolean) {
         assertEquals(expected, TokenRenderer.isReaderModePlaceholder(input.trim('\'')))
@@ -101,5 +108,12 @@ class TokenRendererTest {
         assertFalse(TokenRenderer.isConnectingPrefix('('))
         assertFalse(TokenRenderer.isConnectingPrefix(')'))
         assertFalse(TokenRenderer.isConnectingPrefix(';'))
+    }
+
+    @Test
+    fun `ternary triplet constants have expected values`() {
+        assertEquals("should",    TokenRenderer.TERNARY_W0)
+        assertEquals("thereupon", TokenRenderer.TERNARY_W1)
+        assertEquals("otherwise", TokenRenderer.TERNARY_W2)
     }
 }
