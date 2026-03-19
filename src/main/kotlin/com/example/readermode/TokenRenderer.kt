@@ -48,6 +48,16 @@ package com.example.readermode
  *  $name    →  lo-name
  *  $someVar →  lo-some·var
  *  $$name   →  lo-lo-name   (PHP variable variables)
+ *
+ * Colon usages (context-dependent):
+ *  - Return type:         function foo(): int         →  as
+ *  - Named argument:      foo(bar: $baz)              →  by
+ *  - Block start:         if ($x): ... endif;         →  thereon
+ *  - Switch/case:         case 1: ...                 →  thereon
+ *  - Label for goto:      label:                      →  -tag
+ *
+ *  The folding builder detects the PSI context for each colon and applies the
+ *  appropriate word or suffix. See README for full rationale.
  */
 object TokenRenderer {
 
@@ -103,6 +113,12 @@ object TokenRenderer {
     const val TERNARY_W1 = "thereupon"
     const val TERNARY_W2 = "otherwise"
 
+    /** Words for colon usages. */
+    const val COLON_RETURN_TYPE = "as"
+    const val COLON_NAMED_ARG = "by"
+    const val COLON_BLOCK_START = "thereon"
+    const val COLON_LABEL_SUFFIX = "-tag"
+
     private val WORDS_SET: Set<String> = (BRACKET_WORDS.values + OPERATOR_WORDS.values).toSet()
 
     fun isBracket(c: Char): Boolean = c in BRACKET_WORDS
@@ -137,6 +153,8 @@ object TokenRenderer {
             trimmed.matches(Regex("(${Regex.escape(SIGIL_PREFIX)})+\\S+")) -> true
             trimmed == TERNARY_W1 || trimmed == TERNARY_W2 -> true
             trimmed.startsWith("$TERNARY_W0 ") -> true
+            trimmed == COLON_RETURN_TYPE || trimmed == COLON_NAMED_ARG || trimmed == COLON_BLOCK_START -> true
+            trimmed.endsWith(COLON_LABEL_SUFFIX) -> true
             else -> trimmed.isNotEmpty()
                 && trimmed.split(' ').filter { it.isNotEmpty() }.all { it in WORDS_SET }
         }

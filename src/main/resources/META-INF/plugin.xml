@@ -29,6 +29,11 @@
                 description="Toggle reader mode: render identifiers with middle dot separators">
             <add-to-group group-id="ViewMenu" anchor="last"/>
         </action>
+        <action id="ReaderMode.ColonPsiReporter"
+                class="com.example.readermode.ColonPsiReporterAction"
+                text="Report Colon PSI"
+                description="Prints PSI parent class names for all colons in the current file">
+            <add-to-group group-id="EditorMenu" anchor="last"/>
+        </action>
     </actions>
 </idea-plugin>
-

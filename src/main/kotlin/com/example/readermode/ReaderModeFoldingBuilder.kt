@@ -128,6 +128,44 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
                         )
                     }
 
+                    // ── Colon usages (context-sensitive) ─────────────────────────────
+                    text == ":" && !isTernaryContext(element) -> {
+                        when {
+                            isReturnTypeColon(element) -> {
+                                val lead = if (start > 0 && !source[start - 1].isWhitespace()) " " else ""
+                                val tail = if (end < source.length && !source[end].isWhitespace()) " " else ""
+                                descriptors += FoldingDescriptor(
+                                    element.node, element.textRange, null,
+                                    lead + TokenRenderer.COLON_RETURN_TYPE + tail,
+                                )
+                            }
+                            isNamedArgumentColon(element) -> {
+                                val lead = if (start > 0 && !source[start - 1].isWhitespace()) " " else ""
+                                val tail = if (end < source.length && !source[end].isWhitespace()) " " else ""
+                                descriptors += FoldingDescriptor(
+                                    element.node, element.textRange, null,
+                                    lead + TokenRenderer.COLON_NAMED_ARG + tail,
+                                )
+                            }
+                            isBlockStartColon(element) -> {
+                                val prevChar = if (start > 0) source[start - 1] else null
+                                val lead = if (start > 0 && !source[start - 1].isWhitespace() && prevChar != ')') " " else ""
+                                val tail = if (end < source.length && !source[end].isWhitespace()) " " else ""
+                                descriptors += FoldingDescriptor(
+                                    element.node, element.textRange, null,
+                                    lead + TokenRenderer.COLON_BLOCK_START + tail,
+                                )
+                            }
+                            isLabelColon(element) -> {
+                                // Suffix, no leading/trailing space
+                                descriptors += FoldingDescriptor(
+                                    element.node, element.textRange, null,
+                                    TokenRenderer.COLON_LABEL_SUFFIX,
+                                )
+                            }
+                        }
+                    }
+
                     // ── Single-character bracket / prefix operator ─────────────────
                     text.length == 1 && TokenRenderer.isBracket(text[0]) -> {
                         val word = TokenRenderer.wordFor(text[0])!!
@@ -243,4 +281,28 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
 
     override fun isCollapsedByDefault(node: ASTNode): Boolean =
         ReaderModeService.getInstance().isEnabled
+
+    // Helper functions for colon context detection
+    private fun isReturnTypeColon(element: LeafPsiElement): Boolean {
+        val parent = element.parent ?: return false
+        val name = parent.javaClass.simpleName
+        return name.contains("ReturnType") || name.contains("Function")
+    }
+    private fun isNamedArgumentColon(element: LeafPsiElement): Boolean {
+        val parent = element.parent ?: return false
+        val name = parent.javaClass.simpleName
+        return name.contains("NamedArgument")
+    }
+    private fun isBlockStartColon(element: LeafPsiElement): Boolean {
+        val parent = element.parent ?: return false
+        val name = parent.javaClass.simpleName
+        return name == "IfImpl" || name == "WhileImpl" ||
+               name == "ForImpl" || name == "ForeachImpl" ||
+               name == "PhpCaseImpl"
+    }
+    private fun isLabelColon(element: LeafPsiElement): Boolean {
+        val parent = element.parent ?: return false
+        val name = parent.javaClass.simpleName
+        return name.contains("Label")
+    }
 }

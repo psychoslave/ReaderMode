@@ -102,6 +102,22 @@ class TokenRendererTest {
         assertEquals(expected, TokenRenderer.isReaderModePlaceholder(input.trim('\'')))
     }
 
+    @ParameterizedTest(name = "colon placeholder: {0} → {1}")
+    @CsvSource(
+        "as, true",
+        "by, true",
+        "thereon, true",
+        "foo-tag, true",
+        "bar-tag, true",
+        "baz-tag, true",
+        "notatag, false",
+        "asby, false",
+        "thereonas, false"
+    )
+    fun `recognizes colon usages as placeholders`(input: String, expected: Boolean) {
+        assertEquals(expected, TokenRenderer.isReaderModePlaceholder(input))
+    }
+
     @Test
     fun `isConnectingPrefix is true only for prefix-connector tokens`() {
         assertTrue(TokenRenderer.isConnectingPrefix('!'))

@@ -436,6 +436,30 @@ problem persists.
 conditional test, and *settle* (6 chars) is a content verb, not a function
 word.
 
+### Colon usages → context-sensitive words
+
+The `:` token is rendered differently depending on its syntactic context:
+
+| Context                | Example                        | Word      | Rationale summary |
+|------------------------|--------------------------------|-----------|-------------------|
+| Return type            | `function foo(): int`          | `as`      | English ascription: "foo as int". Short, neutral, no collision. |
+| Named argument         | `foo(bar: $baz)`               | `by`      | English agentive: "bar by baz". Short, natural, no collision. |
+| Block/case start       | `if ($x): ... endif;`<br>`case 1:` | `thereon` | Consequence marker: "if x, thereon ...". Matches ternary W1. |
+| Label for goto         | `label:`                       | `-tag`    | Suffix: "label-tag". English for a named marker. |
+
+**Rationale for each word choice:**
+
+- **Return type — `as`**: The colon in a return type reads as ascription: *function foo(): int* means "foo as int". `as` is the shortest, most neutral English word for this relationship, and is not a keyword in PHP, Java, or Kotlin in this context. Alternatives like `of`, `is`, or `returns` were rejected for being either ambiguous, too long, or reserved.
+
+- **Named argument — `by`**: The colon in a named argument (e.g., `foo(bar: $baz)`) expresses agency: "bar by baz". `by` is short, natural, and unambiguous. It was previously used for assignment, but is now reserved for this more precise context. Alternatives like `with`, `as`, or `for` were rejected for being ambiguous or colliding with other usages.
+
+- **Block/case start — `thereon`**: The colon after a block header (e.g., `if ($x): ... endif;`) or a case label (e.g., `case 1:`) marks the start of a consequence. `thereon` means "immediately after that" — the same word used for the ternary `?` (W1). This creates a consistent consequence marker across all conditional and case structures. Alternatives like `then`, `so`, or `do` were rejected for being too short, ambiguous, or already used for other tokens.
+
+- **Label for goto — `-tag`**: The colon after a label (e.g., `label:`) is rendered as the suffix `-tag`, so `label:` becomes `label-tag`. This is the plain English word for a named marker, and is never ambiguous in code. Alternatives like `mark`, `labelled`, or `goto` were rejected for being either too long, too specific, or colliding with keywords.
+
+**Why not use the same word for all colons?**
+Colons serve multiple unrelated roles in programming languages: ascription, agency, block start, and label. Using a single word would create ambiguity and reduce the clarity of the reader-mode view. Context-sensitive rendering ensures each usage is as clear and natural as possible.
+
 ### Arrow-function tokens → "from" / "to"
 
 The `fn` keyword and `=>` operator are rendered as a directional pair:
@@ -558,18 +582,4 @@ src/main/resources/META-INF/
   readermode-java.xml       optional: registers for language="JAVA"
   readermode-kotlin.xml     optional: registers for language="kotlin"
   readermode-php.xml        optional: registers for language="PHP"
-```
-
----
-
-## Building & running
-
-Requirements: JDK 17, Gradle 9 (wrapper included), `mise` for JDK management.
-
-```bash
-# Run a sandboxed PhpStorm instance with the plugin installed
-./gradlew runIde
-
-# Run unit tests
-./gradlew test
 ```
