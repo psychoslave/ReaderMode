@@ -537,6 +537,46 @@ The `&&` operator (logical AND) is rendered as **as·well·as**:
 **Summary:**
 *As·well·as* is clear, unambiguous, and avoids precedence confusion with the `and` keyword in PHP, Ruby, and other languages. It fits the project's principle of prioritizing correctness and clarity, and supports the goal of rendering code as natural, readable prose.
 
+### Logical OR operator → "slash"
+
+The `||` operator (logical OR) is rendered as **slash**:
+
+| Token | Word    | Role               |
+|-------|---------|--------------------|
+| `||`  | `slash` | logical disjunction|
+
+**Rationale — inclusive, visual, and unambiguous.**  
+*Slash* is a familiar English word for the `/` character, often used in prose and speech to mean "or" or "alternatively" (e.g., "and/or"). It is short, visually distinct, and not a reserved keyword in any mainstream language. Using *slash* for logical OR avoids confusion with the `or` keyword, which, like `and`, has different precedence in PHP, Ruby, and other languages. The word is easy to read and pronounce, and fits the project's prose-oriented style.
+
+**Alternatives considered and rejected:**
+
+- **`or`** — Direct English equivalent, but a reserved keyword with different precedence in many languages, risking confusion and collision.
+- **`yea`** — Considered for inclusive or, but reserved here for exclusive or (XOR) to maintain a clear distinction.
+- **`||`** — Retaining the symbol would not fit the reader-mode’s prose goal.
+
+**Summary:**
+*Slash* is clear, concise, and avoids precedence confusion with the `or` keyword. It is visually and semantically appropriate for inclusive disjunction in code rendered as prose.
+
+### Exclusive OR operator → "yea"
+
+The `xor` operator (boolean exclusive OR in PHP and some other languages) is rendered as **yea**:
+
+| Token | Word   | Role                  |
+|-------|--------|-----------------------|
+| `xor` | `yea`  | exclusive disjunction |
+
+**Rationale — archaic, distinctive, and expressive.**  
+*Yea* is an archaic English word meaning "or even, or more like, nay" — introducing a stronger or more appropriate alternative. This fits the semantics of exclusive or, which selects one or the other, but not both. The word is short, distinctive, and not a reserved keyword in any mainstream language. Using *yea* for XOR avoids confusion with *slash* (inclusive or) and maintains a clear distinction between the two logical operations.
+
+**Alternatives considered and rejected:**
+
+- **`^`** — In PHP and many languages, `^` is the bitwise XOR operator, not boolean XOR. Rendering it as *yea* would be misleading for boolean logic. (No mapping is provided for bitwise XOR.)
+- **`or`** — Too ambiguous for exclusive or; reserved for inclusive or in many languages.
+- **`xor`** — Retaining the keyword would not fit the reader-mode’s prose goal.
+
+**Summary:**
+*Yea* is expressive, unambiguous, and fits the project's goal of rendering code as natural, readable prose, while clearly distinguishing exclusive or from inclusive or. Only the boolean `xor` operator is mapped; bitwise `^` is not mapped.
+
 ---
 
 ## How it works

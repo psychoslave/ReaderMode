@@ -45,6 +45,9 @@ class TokenRendererTest {
         "=, here",
         "==, par",
         "===, fit",
+        "&&, as·well·as",
+        "||, slash",
+        "xor, yea",
     )
     fun `maps operator tokens to words`(input: String, expected: String) {
         assertEquals(expected, TokenRenderer.wordForOperator(input))
