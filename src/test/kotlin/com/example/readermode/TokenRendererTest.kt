@@ -132,4 +132,12 @@ class TokenRendererTest {
         assertEquals("thereupon", TokenRenderer.TERNARY_W1)
         assertEquals("otherwise", TokenRenderer.TERNARY_W2)
     }
+
+    @ParameterizedTest(name = "{0} → {1}")
+    @CsvSource(
+        "&&, as·well·as",
+    )
+    fun `maps logical AND operator to as·well·as`(input: String, expected: String) {
+        assertEquals(expected, TokenRenderer.wordForOperator(input))
+    }
 }

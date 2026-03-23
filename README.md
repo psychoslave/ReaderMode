@@ -515,22 +515,27 @@ rather than two disconnected words:
 also suppresses the *leading* space of the immediately following token, so
 chains never render as `non- non- value`.
 
-### Spacing
+### Logical AND operator → "as·well·as"
 
-Bracket, operator, and terminator folds are padded automatically so that no
-token ever visually glues to its neighbour:
+The `&&` operator (logical AND) is rendered as **as·well·as**:
 
-- a **leading space** is inserted when the preceding source character is not
-  whitespace and is not itself a connecting-prefix token (such as `!`);
-- a **trailing space** is inserted when the following source character is
-  neither whitespace nor another structural token, and the replacement word
-  does not itself end with `-`.
+| Token | Word         | Role                |
+|-------|--------------|---------------------|
+| `&&`  | `as·well·as` | logical conjunction |
 
-Result for `__construct(SomeClass $instance)`:
+**Rationale — natural conjunction, unambiguous, and prose-friendly.**  
+*As·well·as* is a natural English phrase expressing conjunction, which fits the logical AND operation in code. The use of middots (·) visually distinguishes it from the plain English phrase, making it clear that it is a structural token replacement. This choice avoids ambiguity with the `and` keyword, which in some languages (such as PHP and Ruby) has different precedence from `&&` and can be a reserved word, leading to confusion if used as a direct replacement.  
 
-```
-__construct do some·class lo-instance go
-```
+*As·well·as* is also longer and more prosodically fluid than a single word, which helps it blend into prose-style code rendering, matching the project's goal of readable, flowing output. It is unambiguous, not a reserved keyword in any mainstream language, and does not risk collision with variable or method names.
+
+**Alternatives considered and rejected:**
+
+- **`and`** — The most direct English equivalent, but in PHP, Ruby, and other languages, `and` is a keyword with different precedence from `&&`, which could cause confusion in prose rendering and when reading code aloud. Using `and` would also risk collision with code that uses `and` as a variable or method name.
+- **`along`, `whereover`** — More poetic, but less immediately clear in intent and less likely to be understood as a logical conjunction by readers unfamiliar with the mapping.
+- **`&&`** — Retaining the symbol would not fit the reader-mode’s prose goal.
+
+**Summary:**
+*As·well·as* is clear, unambiguous, and avoids precedence confusion with the `and` keyword in PHP, Ruby, and other languages. It fits the project's principle of prioritizing correctness and clarity, and supports the goal of rendering code as natural, readable prose.
 
 ---
 

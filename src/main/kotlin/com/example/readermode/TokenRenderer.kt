@@ -86,6 +86,7 @@ object TokenRenderer {
         "="   to "here",
         "=="  to "par",
         "===" to "fit",
+        "&&"  to "as·well·as",
     )
 
     /**
