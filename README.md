@@ -5,7 +5,8 @@ tokens are visually replaced by more natural words and forms — without touchin
 the underlying source file.
 
 Toggled via **View → Reader Mode**.  
-Tested on PhpStorm 2024.3; the plugin also registers for Java and Kotlin
+Tested on PhpStorm 2024.3; the plugin also registers for Java, Kotlin, PHP,
+and web languages (JavaScript/TypeScript/JSX/TSX)
 (optional dependencies, loaded only when the respective language plugin is
 present).
 
@@ -627,4 +628,5 @@ src/main/resources/META-INF/
   readermode-java.xml       optional: registers for language="JAVA"
   readermode-kotlin.xml     optional: registers for language="kotlin"
   readermode-php.xml        optional: registers for language="PHP"
+  readermode-web.xml        optional: registers for JS/TS/JSX/TSX languages
 ```

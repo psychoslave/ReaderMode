@@ -1,0 +1,13 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <lang.foldingBuilder language="JavaScript"
+                             implementationClass="com.example.readermode.ReaderModeFoldingBuilder"/>
+        <lang.foldingBuilder language="TypeScript"
+                             implementationClass="com.example.readermode.ReaderModeFoldingBuilder"/>
+        <lang.foldingBuilder language="JavaScript JSX"
+                             implementationClass="com.example.readermode.ReaderModeFoldingBuilder"/>
+        <lang.foldingBuilder language="TypeScript JSX"
+                             implementationClass="com.example.readermode.ReaderModeFoldingBuilder"/>
+    </extensions>
+</idea-plugin>
+
