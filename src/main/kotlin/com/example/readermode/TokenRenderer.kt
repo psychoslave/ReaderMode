@@ -36,6 +36,7 @@ package com.example.readermode
  *  === →  fit   (strict equality: x exactly fits y, same type and value)
  *  !=  →  unlike (not equal)
  *  <>  →  unlike (PHP not-equal alias of !=)
+ *  <=> →  spy   (spaceship / three-way comparison)
  *
  * Relational comparison operators:
  *  <   →  ere   (strictly less than: before, prior to)
@@ -109,6 +110,7 @@ object TokenRenderer {
         "===" to "fit",
         "!="  to "unlike",
         "<>"  to "unlike",
+        "<=>" to "spy",
         "<"   to "ere",
         ">"   to "over",
         "<="  to "ben",

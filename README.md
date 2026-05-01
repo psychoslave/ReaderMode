@@ -232,6 +232,7 @@ different navigation models, and the two words reflect that distinction.
 | `===` | `fit`  | strict equality — same value and type |
 | `!=`  | `unlike` | not equal |
 | `<>`  | `unlike` | not equal (PHP alias of `!=`) |
+| `<=>` | `spy` | three-way comparison (spaceship) |
 
 **`=` — "here".**  
 *Here* is a deictic adverb — its function is to point: *here is the thing*.
@@ -336,6 +337,11 @@ Both not-equal forms render as *unlike*.  PHP supports `<>` as a lexical alias
 of `!=`, so the reader-mode rendering keeps them semantically identical.
 The term follows Englishest's not-equal family (`unlike?`) and reads naturally
 in infix position: *"lo-a unlike lo-b"*.
+
+**`<=>` — "spy".**  
+The spaceship operator renders as *spy*, following Englishest's three-way
+comparison vocabulary (`spy`).  The word is short, distinctive, and reads
+cleanly as an infix comparator in sorter/collator code.
 
 ### Relational comparison operators → "ere" / "over" / "ben" / "cap"
 
