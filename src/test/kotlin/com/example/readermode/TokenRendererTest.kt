@@ -98,6 +98,10 @@ class TokenRendererTest {
         "ben,               true",
         "cap,               true",
         "spy,               true",
+        "raw,               true",
+        "sic,               true",
+        "bid,               true",
+        "fin,               true",
         "within,            true",
         "withinside,        true",
         "outwith,           true",
@@ -154,6 +158,14 @@ class TokenRendererTest {
         assertEquals("should",    TokenRenderer.TERNARY_W0)
         assertEquals("thereupon", TokenRenderer.TERNARY_W1)
         assertEquals("otherwise", TokenRenderer.TERNARY_W2)
+    }
+
+    @Test
+    fun `quote word constants have expected values`() {
+        assertEquals("raw", TokenRenderer.QUOTE_SINGLE_OPEN)
+        assertEquals("sic", TokenRenderer.QUOTE_SINGLE_CLOSE)
+        assertEquals("bid", TokenRenderer.QUOTE_DOUBLE_OPEN)
+        assertEquals("fin", TokenRenderer.QUOTE_DOUBLE_CLOSE)
     }
 
     @ParameterizedTest(name = "{0} → {1}")

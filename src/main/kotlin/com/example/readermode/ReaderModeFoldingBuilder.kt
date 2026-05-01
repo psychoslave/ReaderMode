@@ -109,7 +109,11 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
 
                 fun foldWord(word: String, useLeading: Boolean = true) {
                     val lead = if (useLeading && start > 0 && !source[start - 1].isWhitespace()) " " else ""
-                    val tail = if (end < source.length && !source[end].isWhitespace()) " " else ""
+                    val tail = if (end < source.length
+                        && !source[end].isWhitespace()
+                        && !TokenRenderer.isBracket(source[end])
+                        && !isLikelyOperatorStartChar(source[end])
+                    ) " " else ""
                     descriptors += FoldingDescriptor(
                         element.node, element.textRange, null,
                         lead + word + tail,
@@ -199,6 +203,26 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
 
                     isTypeTemplateChevron(element) && text == ">" ->
                         foldWord(TokenRenderer.TEMPLATE_CHEVRON_CLOSE)
+
+                    // ── Simple and double quoted string literals ───────────────────
+                    isSingleQuotedLiteral(element, text) ->
+                        foldWord(renderQuotedLiteral(text, '\'', TokenRenderer.QUOTE_SINGLE_OPEN, TokenRenderer.QUOTE_SINGLE_CLOSE))
+
+                    isDoubleQuotedLiteral(element, text) ->
+                        foldWord(renderQuotedLiteral(text, '"', TokenRenderer.QUOTE_DOUBLE_OPEN, TokenRenderer.QUOTE_DOUBLE_CLOSE))
+
+                    // Fallback for PSI trees that split quote delimiters into separate leaves.
+                    isStandaloneQuoteDelimiter(element, '\'') && isOpeningDelimiter(element) ->
+                        foldWord(TokenRenderer.QUOTE_SINGLE_OPEN)
+
+                    isStandaloneQuoteDelimiter(element, '\'') && isClosingDelimiter(element) ->
+                        foldWord(TokenRenderer.QUOTE_SINGLE_CLOSE)
+
+                    isStandaloneQuoteDelimiter(element, '"') && isOpeningDelimiter(element) ->
+                        foldWord(TokenRenderer.QUOTE_DOUBLE_OPEN)
+
+                    isStandaloneQuoteDelimiter(element, '"') && isClosingDelimiter(element) ->
+                        foldWord(TokenRenderer.QUOTE_DOUBLE_CLOSE)
 
                     // ── Single-character bracket / prefix operator ─────────────────
                     text.length == 1 && TokenRenderer.isBracket(text[0]) -> {
@@ -368,4 +392,53 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
         }
         return false
     }
+
+    private fun isSingleQuotedLiteral(element: LeafPsiElement, text: String): Boolean {
+        if (text.length < 2 || text.first() != '\'' || text.last() != '\'' || text.contains('\n') || text.contains('\r')) return false
+        val parentName = element.parent?.javaClass?.simpleName ?: return true
+        // Guard against character literals in languages where single quotes are not strings.
+        return !parentName.contains("Char")
+    }
+
+    private fun isDoubleQuotedLiteral(element: LeafPsiElement, text: String): Boolean {
+        if (text.length < 2 || text.first() != '"' || text.last() != '"' || text.contains('\n') || text.contains('\r')) return false
+        val parentName = element.parent?.javaClass?.simpleName ?: return true
+        // Guard against attributes where the quotes may be parsed separately.
+        // If it's in an attribute context, fall through to isStandaloneQuoteDelimiter instead.
+        return !parentName.contains("Attribute")
+    }
+
+    private fun renderQuotedLiteral(text: String, quote: Char, openWord: String, closeWord: String): String {
+        if (text.length < 2 || text.first() != quote || text.last() != quote) return text
+        val content = text.substring(1, text.length - 1)
+        return if (content.isEmpty()) "$openWord $closeWord" else "$openWord $content $closeWord"
+    }
+
+    private fun isStandaloneQuoteDelimiter(element: LeafPsiElement, quote: Char): Boolean {
+        if (element.text != quote.toString()) return false
+        var current: PsiElement? = element.parent
+        while (current != null) {
+            val name = current.javaClass.simpleName
+            if (name.contains("String") || name.contains("Quoted") || name.contains("Attribute")) return true
+            if (name.contains("Comment") || name.contains("Doc")) return false
+            current = current.parent
+        }
+        return false
+    }
+
+    private fun isOpeningDelimiter(element: LeafPsiElement): Boolean {
+        var prev = element.prevSibling
+        while (prev != null && prev.text.isBlank()) prev = prev.prevSibling
+        return prev == null
+    }
+
+    private fun isClosingDelimiter(element: LeafPsiElement): Boolean {
+        var next = element.nextSibling
+        while (next != null && next.text.isBlank()) next = next.nextSibling
+        return next == null
+    }
+
+    private fun isLikelyOperatorStartChar(c: Char): Boolean = c in setOf(
+        ':', '?', '<', '>', '=', '!', '|', '&', '-', '+', '*', '/', '%', '^'
+    )
 }

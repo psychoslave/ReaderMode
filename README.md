@@ -126,6 +126,28 @@ rhyming endings.
 
 > `$one = 1; $two = 2;` → *"lo-one **here** 1 **ay** lo-two **here** 2 **ay**"*
 
+### String quotes (simple/double) → "raw … sic" / "bid … fin"
+
+For basic quoted string literals, ReaderMode renders opening and closing
+delimiters with distinct words:
+
+| Literal kind | Open | Close |
+|--------------|------|-------|
+| single-quoted | `raw` | `sic` |
+| double-quoted | `bid` | `fin` |
+
+**Rationale.**
+- **`raw … sic`** marks literal/as-written text: `raw` signals verbatim mode,
+  `sic` closes with the explicit "thus written" cue.
+- **`bid … fin`** marks spoken/interpreted text: `bid` (utter/say) opens the
+  quoted utterance, `fin` closes it tersely.
+
+All four words are 3 characters, preserving cadence in string-dense code.
+
+> `'status:ok'` → *"raw status:ok sic"*
+
+> `"hello $name"` → *"bid hello lo-name fin"*
+
 ### Argument / list separator → "eft"
 
 The `,` separator is rendered as **eft**:

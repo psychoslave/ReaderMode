@@ -57,6 +57,10 @@ package com.example.readermode
  *    >   →  so
  *  Relational comparisons keep the mappings above (ere/over/ben/cap).
  *
+ * String quote literals are context-sensitive in the folding builder:
+ *  - single-quoted strings: raw ... sic
+ *  - double-quoted strings: bid ... fin
+ *
  * Ternary operator (context-dependent; rendered as a W0 / W1 / W2 triplet):
  *  condition ? trueExpr : falseExpr
  *    →  should condition thereupon trueExpr otherwise falseExpr
@@ -163,7 +167,17 @@ object TokenRenderer {
     const val TEMPLATE_CHEVRON_OPEN = "withal"
     const val TEMPLATE_CHEVRON_CLOSE = "so"
 
+    /** Context-specific words for simple/double quoted string literals. */
+    const val QUOTE_SINGLE_OPEN = "raw"
+    const val QUOTE_SINGLE_CLOSE = "sic"
+    const val QUOTE_DOUBLE_OPEN = "bid"
+    const val QUOTE_DOUBLE_CLOSE = "fin"
+
     private val CONTEXT_WORDS = setOf(
+        QUOTE_SINGLE_OPEN,
+        QUOTE_SINGLE_CLOSE,
+        QUOTE_DOUBLE_OPEN,
+        QUOTE_DOUBLE_CLOSE,
         TAG_FRAGMENT_OPEN,
         TAG_FRAGMENT_CLOSE,
         TAG_CHEVRON_OPEN,
