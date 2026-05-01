@@ -107,6 +107,15 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
                 // leading space so the bracket/operator branch must not add it again.
                 fun w0() = if (isCondStart) leading() + TokenRenderer.TERNARY_W0 + " " else ""
 
+                fun foldWord(word: String, useLeading: Boolean = true) {
+                    val lead = if (useLeading && start > 0 && !source[start - 1].isWhitespace()) " " else ""
+                    val tail = if (end < source.length && !source[end].isWhitespace()) " " else ""
+                    descriptors += FoldingDescriptor(
+                        element.node, element.textRange, null,
+                        lead + word + tail,
+                    )
+                }
+
                 when {
                     // ── Ternary "?" → W1 "thereupon" ──────────────────────────────
                     text == "?" && isTernaryContext(element) -> {
@@ -165,6 +174,31 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
                             }
                         }
                     }
+
+                    // ── Context-sensitive chevrons (<, </, >, />) ───────────────────
+                    isTagChevron(element) && text == "<>" ->
+                        foldWord(TokenRenderer.TAG_FRAGMENT_OPEN)
+
+                    isTagChevron(element) && text == "</>" ->
+                        foldWord(TokenRenderer.TAG_FRAGMENT_CLOSE)
+
+                    isTagChevron(element) && text == "<" ->
+                        foldWord(TokenRenderer.TAG_CHEVRON_OPEN)
+
+                    isTagChevron(element) && text == "</" ->
+                        foldWord(TokenRenderer.TAG_CHEVRON_CLOSE_START)
+
+                    isTagChevron(element) && text == ">" ->
+                        foldWord(TokenRenderer.TAG_CHEVRON_END)
+
+                    isTagChevron(element) && text == "/>" ->
+                        foldWord(TokenRenderer.TAG_CHEVRON_SELF_CLOSE)
+
+                    isTypeTemplateChevron(element) && text == "<" ->
+                        foldWord(TokenRenderer.TEMPLATE_CHEVRON_OPEN)
+
+                    isTypeTemplateChevron(element) && text == ">" ->
+                        foldWord(TokenRenderer.TEMPLATE_CHEVRON_CLOSE)
 
                     // ── Single-character bracket / prefix operator ─────────────────
                     text.length == 1 && TokenRenderer.isBracket(text[0]) -> {
@@ -304,5 +338,34 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
         val parent = element.parent ?: return false
         val name = parent.javaClass.simpleName
         return name.contains("Label")
+    }
+
+    private fun isTagChevron(element: LeafPsiElement): Boolean {
+        var current: PsiElement? = element.parent
+        while (current != null) {
+            val name = current.javaClass.simpleName
+            if (name.contains("JSX") || name.contains("Xml") || name.contains("Tag")) return true
+            // Stop climbing once we hit expression/type roots where tag context is impossible.
+            if (name.contains("Expression") || name.contains("Type") || name.contains("Binary")) return false
+            current = current.parent
+        }
+        return false
+    }
+
+    private fun isTypeTemplateChevron(element: LeafPsiElement): Boolean {
+        var current: PsiElement? = element.parent
+        while (current != null) {
+            val name = current.javaClass.simpleName
+            if (
+                name.contains("TypeArgument") ||
+                name.contains("TypeParameter") ||
+                name.contains("TypeArguments") ||
+                name.contains("TypeParameters") ||
+                name.contains("Generic")
+            ) return true
+            if (name.contains("JSX") || name.contains("Xml") || name.contains("Tag")) return false
+            current = current.parent
+        }
+        return false
     }
 }

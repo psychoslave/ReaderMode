@@ -34,12 +34,27 @@ package com.example.readermode
  *  =   →  here  (assignment: x, here, value — deictic presenter)
  *  ==  →  par   (loose equality: x on par with y, value with coercion)
  *  === →  fit   (strict equality: x exactly fits y, same type and value)
+ *  !=  →  unlike (not equal)
+ *  <>  →  unlike (PHP not-equal alias of !=)
  *
  * Relational comparison operators:
  *  <   →  ere   (strictly less than: before, prior to)
  *  >   →  over  (strictly greater than: above, beyond)
  *  <=  →  ben   (less than or equal: inside, within — Scots)
  *  >=  →  cap   (greater than or equal: upper limit, ceiling)
+ *
+ * Chevron operators are context-sensitive in the folding builder:
+ *  JSX/XML tags:
+ *    <>  →  withinside
+ *    </> →  herewith
+ *    <   →  within
+ *    </  →  outwith
+ *    >   →  therewith
+ *    />  →  forthwith
+ *  Type templates / generics:
+ *    <   →  withal
+ *    >   →  so
+ *  Relational comparisons keep the mappings above (ere/over/ben/cap).
  *
  * Ternary operator (context-dependent; rendered as a W0 / W1 / W2 triplet):
  *  condition ? trueExpr : falseExpr
@@ -92,6 +107,8 @@ object TokenRenderer {
         "="   to "here",
         "=="  to "par",
         "===" to "fit",
+        "!="  to "unlike",
+        "<>"  to "unlike",
         "<"   to "ere",
         ">"   to "over",
         "<="  to "ben",
@@ -132,7 +149,30 @@ object TokenRenderer {
     const val COLON_BLOCK_START = "thereon"
     const val COLON_LABEL_SUFFIX = "-tag"
 
-    private val WORDS_SET: Set<String> = (BRACKET_WORDS.values + OPERATOR_WORDS.values).toSet()
+    /** Context-specific words for chevrons in JSX/XML tags. */
+    const val TAG_FRAGMENT_OPEN = "withinside"
+    const val TAG_FRAGMENT_CLOSE = "herewith"
+    const val TAG_CHEVRON_OPEN = "within"
+    const val TAG_CHEVRON_CLOSE_START = "outwith"
+    const val TAG_CHEVRON_END = "therewith"
+    const val TAG_CHEVRON_SELF_CLOSE = "forthwith"
+
+    /** Context-specific words for type-template chevrons. */
+    const val TEMPLATE_CHEVRON_OPEN = "withal"
+    const val TEMPLATE_CHEVRON_CLOSE = "so"
+
+    private val CONTEXT_WORDS = setOf(
+        TAG_FRAGMENT_OPEN,
+        TAG_FRAGMENT_CLOSE,
+        TAG_CHEVRON_OPEN,
+        TAG_CHEVRON_CLOSE_START,
+        TAG_CHEVRON_END,
+        TAG_CHEVRON_SELF_CLOSE,
+        TEMPLATE_CHEVRON_OPEN,
+        TEMPLATE_CHEVRON_CLOSE,
+    )
+
+    private val WORDS_SET: Set<String> = (BRACKET_WORDS.values + OPERATOR_WORDS.values + CONTEXT_WORDS).toSet()
 
     fun isBracket(c: Char): Boolean = c in BRACKET_WORDS
     fun wordFor(c: Char): String? = BRACKET_WORDS[c]

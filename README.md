@@ -230,6 +230,8 @@ different navigation models, and the two words reflect that distinction.
 | `=`   | `here` | assignment |
 | `==`  | `par`  | loose equality — value, with type coercion |
 | `===` | `fit`  | strict equality — same value and type |
+| `!=`  | `unlike` | not equal |
+| `<>`  | `unlike` | not equal (PHP alias of `!=`) |
 
 **`=` — "here".**  
 *Here* is a deictic adverb — its function is to point: *here is the thing*.
@@ -329,6 +331,12 @@ deliberate: being on par allows some flexibility; fitting does not.
 
 > `$exact = $type === 'string'` → *"lo-exact **here** lo-type **fit** 'string'"*
 
+**`!=` / `<>` — "unlike".**  
+Both not-equal forms render as *unlike*.  PHP supports `<>` as a lexical alias
+of `!=`, so the reader-mode rendering keeps them semantically identical.
+The term follows Englishest's not-equal family (`unlike?`) and reads naturally
+in infix position: *"lo-a unlike lo-b"*.
+
 ### Relational comparison operators → "ere" / "over" / "ben" / "cap"
 
 The four relational operators are rendered as a matched set of short English words:
@@ -402,6 +410,76 @@ identifier in PHP, JavaScript, TypeScript, Java, or Kotlin:
 - `over` appears as a variable/method name but never as a reserved keyword.
 - `ben` and `cap` are common English words but have no syntactic role in
   any of the target languages.
+
+### Context-sensitive chevrons in tags and templates
+
+The `<` / `>` chevrons are rendered by syntactic context, not by character
+alone. This avoids ambiguity between three different roles:
+
+- JSX/XML tag delimiters
+- Type-template / generic delimiters
+- Relational comparison operators (`<`, `>`, `<=`, `>=`)
+
+| Context | Token | Word |
+|---------|-------|------|
+| JSX fragment open | `<>` | `withinside` |
+| JSX fragment close | `</>` | `herewith` |
+| JSX/XML tag start | `<`  | `within` |
+| JSX/XML closing-tag start | `</` | `outwith` |
+| JSX/XML tag end | `>` | `therewith` |
+| JSX/XML self-close | `/>` | `forthwith` |
+| Type template open | `<` | `withal` |
+| Type template close | `>` | `so` |
+| Relational compare | `<` / `>` | `ere` / `over` |
+
+**Why context-sensitive?**  
+In modern web code, the same glyphs appear in totally different constructs.
+Applying one global replacement causes immediate regressions: JSX tags become
+comparison prose, or generic types become XML-like narration. The folding
+builder therefore classifies each chevron by PSI context before assigning a
+word.
+
+This also disambiguates `<>` safely across languages:
+- in JSX fragment context: `<>` → `withinside`
+- in PHP comparison context: `<>` → `unlike` (same as `!=`)
+
+**Tag words — the `-with` family.**  
+`withinside / herewith / within / outwith / therewith / forthwith` form a coherent lexical family,
+keep all four tag cases distinct, and preserve directional semantics:
+
+- enter anonymous fragment scope → `withinside`
+- leave anonymous fragment scope → `herewith`
+
+- enter tag scope → `within`
+- start leaving scope → `outwith`
+- seal the current tag head → `therewith`
+- seal and close immediately (empty element) → `forthwith`
+
+> `<>... </>`  
+> → *"withinside ... herewith"*
+
+> `<UseClientTranslations voicePageName="payment-ui">`  
+> → *"within use·client·translations voice·page·name here \"payment-ui\" therewith"*
+
+> `</UseClientTranslations>`  
+> → *"outwith use·client·translations therewith"*
+
+> `<Icon />`  
+> → *"within icon forthwith"*
+
+**Template words — prosody-first close marker.**  
+For nested generics, closing markers can repeat indefinitely (`>>>>...`).
+Using a short, chant-like closer improves spoken rhythm and scanability in
+dense type expressions:
+
+- open template → `withal`
+- close template → `so`
+
+> `Promise<Result<T>>`  
+> → *"promise withal result withal t so so"*
+
+This mirrors the same prosodic design principle used by `do` / `go` for `(` / `)`:
+short repeated closures are easier to parse aloud.
 
 ### Ternary operator → "should … thereupon … otherwise …"
 
