@@ -35,6 +35,12 @@ package com.example.readermode
  *  ==  →  par   (loose equality: x on par with y, value with coercion)
  *  === →  fit   (strict equality: x exactly fits y, same type and value)
  *
+ * Relational comparison operators:
+ *  <   →  ere   (strictly less than: before, prior to)
+ *  >   →  over  (strictly greater than: above, beyond)
+ *  <=  →  ben   (less than or equal: inside, within — Scots)
+ *  >=  →  cap   (greater than or equal: upper limit, ceiling)
+ *
  * Ternary operator (context-dependent; rendered as a W0 / W1 / W2 triplet):
  *  condition ? trueExpr : falseExpr
  *    →  should condition thereupon trueExpr otherwise falseExpr
@@ -86,6 +92,10 @@ object TokenRenderer {
         "="   to "here",
         "=="  to "par",
         "===" to "fit",
+        "<"   to "ere",
+        ">"   to "over",
+        "<="  to "ben",
+        ">="  to "cap",
         "&&"  to "as·well·as",
         "||"  to "slash",
         "xor" to "yea",

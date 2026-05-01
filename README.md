@@ -329,6 +329,80 @@ deliberate: being on par allows some flexibility; fitting does not.
 
 > `$exact = $type === 'string'` → *"lo-exact **here** lo-type **fit** 'string'"*
 
+### Relational comparison operators → "ere" / "over" / "ben" / "cap"
+
+The four relational operators are rendered as a matched set of short English words:
+
+| Token | Word  | Role |
+|-------|-------|------|
+| `<`   | `ere` | strictly less than |
+| `>`   | `over`| strictly greater than |
+| `<=`  | `ben` | less than or equal to |
+| `>=`  | `cap` | greater than or equal to |
+
+> `$count >= 0 && $count < $limit`  
+> → *"lo-count **cap** 0 as·well·as lo-count **ere** lo-limit"*
+
+> `$score <= $max && $score > $min`  
+> → *"lo-score **ben** lo-max as·well·as lo-score **over** lo-min"*
+
+**Vocabulary source — the *Englishest* Ruby gem.**  
+The four words are drawn directly from the `Comparable` and `Hash` modules of
+the [Englishest](https://github.com/enalsis/englishest) Ruby gem, which
+systematically maps Ruby's operator methods to natural English vocabulary.
+The ReaderMode project already uses two Englishest terms — `par` (`==`) and
+`fit` (`===`) — so extending the same lineage to the relational quartet keeps
+the vocabulary internally coherent.
+
+**`<` — "ere".**  
+*Ere* is the English preposition/conjunction meaning *before, prior to* — the
+exact temporal/ordinal relationship expressed by strict less-than.
+Englishest maps `<` to `ere?`, `afore?`, `precede?`, and several other
+candidates; `ere` is chosen here because it is monosyllabic (2 chars),
+purely syncategorematic (no content meaning beyond *prior*), and sits in the
+same archaic-but-legible register as *whence* (`::`) and *whose* (`->`).
+
+**`>` — "over".**  
+*Over* is the direct directional antonym of *ere*: if *ere* means *below/before*,
+*over* means *above/beyond*.  Englishest lists `over?`, `top?`, `sky?`, and
+`excede?` for `>`; `over` is the shortest and most universally understood,
+carries no keyword risk in any target language, and pairs phonetically with
+*ere* (both are single syllables ending in a vowel).
+
+**`<=` — "ben".**  
+*Ben* is a Scots word meaning *inner, interior, inside* — the same word
+Englishest uses for the `<=` operator on both `Comparable` and `Hash`
+(subset check).  *Inside* captures the inclusive sense of `<=` well: the
+left-hand value is *inside* the range bounded above by the right-hand value.
+At 3 characters it is the shortest non-trivial candidate, and its register
+is consistent with the other archaic picks in this system.  Alternatives
+like *under* (5 chars), *below* (5 chars), and *within* (6 chars) were
+rejected on length; *at_most* is too long and uses an underscore.
+
+**`>=` — "cap".**  
+*Cap* is the English noun for *an upper limit, a ceiling* — the exact
+semantic role of the right-hand operand in a `>=` check: the left-hand value
+meets or exceeds the *cap*.  Englishest uses `cap?` for `>=` on both
+`Comparable` and `Hash` (superset check).  At 3 characters it mirrors *ben*
+in length, forming a tight antonym pair: `ben`/`cap` = inside/ceiling.
+Alternatives like *above* (5 chars), *upon* (4 chars), and *um*/*umbe*
+(archaic, obscure) were considered; `cap` wins on brevity and immediate
+intelligibility in English.
+
+**The strict / non-strict distinction.**  
+`ere`/`over` (strict, 3–4 chars) and `ben`/`cap` (non-strict, 3 chars)
+are visually and phonetically distinct, so the reader can tell at a glance
+whether a boundary is inclusive.  The pairs also reflect natural language:
+*"ere the limit"* implies exclusion; *"within the cap"* implies inclusion.
+
+**No collision risk.**  
+None of the four words is a keyword, built-in method name, or common
+identifier in PHP, JavaScript, TypeScript, Java, or Kotlin:
+- `ere` is archaic and unused in any mainstream language.
+- `over` appears as a variable/method name but never as a reserved keyword.
+- `ben` and `cap` are common English words but have no syntactic role in
+  any of the target languages.
+
 ### Ternary operator → "should … thereupon … otherwise …"
 
 The `? :` ternary is rendered as a three-part structure:
