@@ -2,15 +2,15 @@
 
 // 1. Class property with type annotation
 class ServiceClass {
-  private readonly client: ClientType;
-  readonly config: Config;
-}
+  private readonly client: object;
+  readonly config: Record<string, any>;
 
-// 2. Constructor parameter with type annotation
-protected constructor(
-  logger: Logger,
-  private readonly locale: Locale,
-) {}
+  // 2. Constructor parameter with type annotation
+  constructor(
+    logger: Console,
+    private readonly locale: string,
+  ) {}
+}
 
 // 3. Object literal with properties
 const options = {
@@ -19,7 +19,7 @@ const options = {
 };
 
 // 4. Destructuring with rename
-const { data: result, error } = response;
+const { data: result, error } = { data: "test", error: null };
 
 // 5. Type/interface annotations
 interface ApiResponse {
@@ -37,5 +37,6 @@ function process(input: string): void {}
 
 // 7. Arrow function type
 const handler: (x: number) => string = (x) => x.toString();
+
 
 
