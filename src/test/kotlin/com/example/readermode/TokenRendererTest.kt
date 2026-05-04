@@ -134,6 +134,7 @@ class TokenRendererTest {
         "as, true",
         "by, true",
         "thereon, true",
+        "herewith, true",
         "foo-tag, true",
         "bar-tag, true",
         "baz-tag, true",
@@ -166,6 +167,15 @@ class TokenRendererTest {
         assertEquals("sic", TokenRenderer.QUOTE_SINGLE_CLOSE)
         assertEquals("bid", TokenRenderer.QUOTE_DOUBLE_OPEN)
         assertEquals("fin", TokenRenderer.QUOTE_DOUBLE_CLOSE)
+    }
+
+    @Test
+    fun `colon word constants have expected values`() {
+        assertEquals("as", TokenRenderer.COLON_RETURN_TYPE)
+        assertEquals("by", TokenRenderer.COLON_NAMED_ARG)
+        assertEquals("thereon", TokenRenderer.COLON_BLOCK_START)
+        assertEquals("-tag", TokenRenderer.COLON_LABEL_SUFFIX)
+        assertEquals("herewith", TokenRenderer.COLON_OBJECT_PROPERTY)
     }
 
     @ParameterizedTest(name = "{0} → {1}")

@@ -626,6 +626,8 @@ The `:` token is rendered differently depending on its syntactic context:
 | Return type            | `function foo(): int`          | `as`      | English ascription: "foo as int". Short, neutral, no collision. |
 | Named argument         | `foo(bar: $baz)`               | `by`      | English agentive: "bar by baz". Short, natural, no collision. |
 | Block/case start       | `if ($x): ... endif;`<br>`case 1:` | `thereon` | Consequence marker: "if x, thereon ...". Matches ternary W1. |
+| Object property        | `{ key: value }`               | `herewith` | English archaic "along with this". Introduces the value bound to a property/type. |
+| Type annotation        | `const x: Type`                | `herewith` | Same as object property; both bind a name to a type or value. |
 | Label for goto         | `label:`                       | `-tag`    | Suffix: "label-tag". English for a named marker. |
 
 **Rationale for each word choice:**
@@ -636,10 +638,12 @@ The `:` token is rendered differently depending on its syntactic context:
 
 - **Block/case start — `thereon`**: The colon after a block header (e.g., `if ($x): ... endif;`) or a case label (e.g., `case 1:`) marks the start of a consequence. `thereon` means "immediately after that" — the same word used for the ternary `?` (W1). This creates a consistent consequence marker across all conditional and case structures. Alternatives like `then`, `so`, or `do` were rejected for being too short, ambiguous, or already used for other tokens.
 
+- **Object property & type annotation — `herewith`**: The colon in object literals (e.g., `{ workspace: url }`) or type declarations (e.g., `const x: Type`, `param: Type`) introduces a value or type bound to a name. `herewith` is an archaic English word meaning "along with this" or "hereby", capturing the binding relationship: the property *herewith* its value, the parameter *herewith* its type. At 8 characters it carries semantic weight, matching the length of `thereupon` (ternary W1) and maintaining the archaic-register lineage of words like *whence* (`::`) and *whose* (`->`). Alternatives like `as` (already used for return types) or `to` (ambiguous with arrow-function operator) were rejected for collision or ambiguity.
+
 - **Label for goto — `-tag`**: The colon after a label (e.g., `label:`) is rendered as the suffix `-tag`, so `label:` becomes `label-tag`. This is the plain English word for a named marker, and is never ambiguous in code. Alternatives like `mark`, `labelled`, or `goto` were rejected for being either too long, too specific, or colliding with keywords.
 
-**Why not use the same word for all colons?**
-Colons serve multiple unrelated roles in programming languages: ascription, agency, block start, and label. Using a single word would create ambiguity and reduce the clarity of the reader-mode view. Context-sensitive rendering ensures each usage is as clear and natural as possible.
+**Why context-sensitive?**
+Colons serve multiple unrelated roles: ascription, agency, block start, object binding, type binding, and labels. Using a single word would create ambiguity and reduce the clarity of the reader-mode view. Context-sensitive rendering ensures each usage is as clear and natural as possible while maintaining the overall archaic-register lineage of the vocabulary.
 
 ### Arrow-function tokens → "from" / "to"
 

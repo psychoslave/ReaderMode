@@ -80,6 +80,8 @@ package com.example.readermode
  *  - Named argument:      foo(bar: $baz)              →  by
  *  - Block start:         if ($x): ... endif;         →  thereon
  *  - Switch/case:         case 1: ...                 →  thereon
+ *  - Object property:     { key: value }              →  herewith
+ *  - Type annotation:     const x: Type               →  herewith
  *  - Label for goto:      label:                      →  -tag
  *
  *  The folding builder detects the PSI context for each colon and applies the
@@ -154,6 +156,7 @@ object TokenRenderer {
     const val COLON_NAMED_ARG = "by"
     const val COLON_BLOCK_START = "thereon"
     const val COLON_LABEL_SUFFIX = "-tag"
+    const val COLON_OBJECT_PROPERTY = "herewith"
 
     /** Context-specific words for chevrons in JSX/XML tags. */
     const val TAG_FRAGMENT_OPEN = "withinside"
@@ -173,20 +176,24 @@ object TokenRenderer {
     const val QUOTE_DOUBLE_OPEN = "bid"
     const val QUOTE_DOUBLE_CLOSE = "fin"
 
-    private val CONTEXT_WORDS = setOf(
-        QUOTE_SINGLE_OPEN,
-        QUOTE_SINGLE_CLOSE,
-        QUOTE_DOUBLE_OPEN,
-        QUOTE_DOUBLE_CLOSE,
-        TAG_FRAGMENT_OPEN,
-        TAG_FRAGMENT_CLOSE,
-        TAG_CHEVRON_OPEN,
-        TAG_CHEVRON_CLOSE_START,
-        TAG_CHEVRON_END,
-        TAG_CHEVRON_SELF_CLOSE,
-        TEMPLATE_CHEVRON_OPEN,
-        TEMPLATE_CHEVRON_CLOSE,
-    )
+     private val CONTEXT_WORDS = setOf(
+         QUOTE_SINGLE_OPEN,
+         QUOTE_SINGLE_CLOSE,
+         QUOTE_DOUBLE_OPEN,
+         QUOTE_DOUBLE_CLOSE,
+         TAG_FRAGMENT_OPEN,
+         TAG_FRAGMENT_CLOSE,
+         TAG_CHEVRON_OPEN,
+         TAG_CHEVRON_CLOSE_START,
+         TAG_CHEVRON_END,
+         TAG_CHEVRON_SELF_CLOSE,
+         TEMPLATE_CHEVRON_OPEN,
+         TEMPLATE_CHEVRON_CLOSE,
+         COLON_RETURN_TYPE,
+         COLON_NAMED_ARG,
+         COLON_BLOCK_START,
+         COLON_OBJECT_PROPERTY,
+     )
 
     private val WORDS_SET: Set<String> = (BRACKET_WORDS.values + OPERATOR_WORDS.values + CONTEXT_WORDS).toSet()
 
@@ -222,7 +229,7 @@ object TokenRenderer {
             trimmed.matches(Regex("(${Regex.escape(SIGIL_PREFIX)})+\\S+")) -> true
             trimmed == TERNARY_W1 || trimmed == TERNARY_W2 -> true
             trimmed.startsWith("$TERNARY_W0 ") -> true
-            trimmed == COLON_RETURN_TYPE || trimmed == COLON_NAMED_ARG || trimmed == COLON_BLOCK_START -> true
+            trimmed == COLON_RETURN_TYPE || trimmed == COLON_NAMED_ARG || trimmed == COLON_BLOCK_START || trimmed == COLON_OBJECT_PROPERTY -> true
             trimmed.endsWith(COLON_LABEL_SUFFIX) -> true
             else -> trimmed.isNotEmpty()
                 && trimmed.split(' ').filter { it.isNotEmpty() }.all { it in WORDS_SET }

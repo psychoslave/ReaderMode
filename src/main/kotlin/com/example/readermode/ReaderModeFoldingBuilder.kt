@@ -176,6 +176,14 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
                                     TokenRenderer.COLON_LABEL_SUFFIX,
                                 )
                             }
+                            isObjectPropertyColon(element) -> {
+                                val lead = if (start > 0 && !source[start - 1].isWhitespace()) " " else ""
+                                val tail = if (end < source.length && !source[end].isWhitespace()) " " else ""
+                                descriptors += FoldingDescriptor(
+                                    element.node, element.textRange, null,
+                                    lead + TokenRenderer.COLON_OBJECT_PROPERTY + tail,
+                                )
+                            }
                         }
                     }
 
@@ -362,6 +370,25 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
         val parent = element.parent ?: return false
         val name = parent.javaClass.simpleName
         return name.contains("Label")
+    }
+
+    private fun isObjectPropertyColon(element: LeafPsiElement): Boolean {
+        var current: PsiElement? = element.parent
+        while (current != null) {
+            val name = current.javaClass.simpleName
+            // Detect object literal / type annotation contexts
+            if (name.contains("ObjectLiteral") || name.contains("ObjectProperty") ||
+                name.contains("Property") || name.contains("ObjectElement") ||
+                name.contains("Destructuring") || name.contains("TypeAnnotation") ||
+                name.contains("JSXAttribute") || name.contains("XmlAttribute")
+            ) return true
+            // Stop climbing when we reach statement or ternary boundaries
+            if (name.contains("Statement") || name.contains("Ternary") ||
+                name.contains("Conditional") || name.contains("Expression") && !name.contains("Object")
+            ) return false
+            current = current.parent
+        }
+        return false
     }
 
     private fun isTagChevron(element: LeafPsiElement): Boolean {
