@@ -134,7 +134,7 @@ class TokenRendererTest {
         "as, true",
         "by, true",
         "thereon, true",
-        "herewith, true",
+        "herein, true",
         "foo-tag, true",
         "bar-tag, true",
         "baz-tag, true",
@@ -175,7 +175,7 @@ class TokenRendererTest {
         assertEquals("by", TokenRenderer.COLON_NAMED_ARG)
         assertEquals("thereon", TokenRenderer.COLON_BLOCK_START)
         assertEquals("-tag", TokenRenderer.COLON_LABEL_SUFFIX)
-        assertEquals("herewith", TokenRenderer.COLON_OBJECT_PROPERTY)
+        assertEquals("herein", TokenRenderer.COLON_OBJECT_PROPERTY)
     }
 
     @ParameterizedTest(name = "{0} → {1}")

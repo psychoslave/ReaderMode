@@ -77,11 +77,11 @@ package com.example.readermode
  *
  * Colon usages (context-dependent):
  *  - Return type:         function foo(): int         →  as
+ *  - Type annotation:     const x: Type; class T {...}  →  as
  *  - Named argument:      foo(bar: $baz)              →  by
  *  - Block start:         if ($x): ... endif;         →  thereon
  *  - Switch/case:         case 1: ...                 →  thereon
- *  - Object property:     { key: value }              →  herewith
- *  - Type annotation:     const x: Type               →  herewith
+ *  - Object property:     { key: value }              →  herein
  *  - Label for goto:      label:                      →  -tag
  *
  *  The folding builder detects the PSI context for each colon and applies the
@@ -156,7 +156,7 @@ object TokenRenderer {
     const val COLON_NAMED_ARG = "by"
     const val COLON_BLOCK_START = "thereon"
     const val COLON_LABEL_SUFFIX = "-tag"
-    const val COLON_OBJECT_PROPERTY = "herewith"
+    const val COLON_OBJECT_PROPERTY = "herein"
 
     /** Context-specific words for chevrons in JSX/XML tags. */
     const val TAG_FRAGMENT_OPEN = "withinside"

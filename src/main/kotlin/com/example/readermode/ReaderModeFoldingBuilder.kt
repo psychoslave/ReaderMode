@@ -152,6 +152,14 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
                                     lead + TokenRenderer.COLON_RETURN_TYPE + tail,
                                 )
                             }
+                            isTypeAnnotationColon(element) -> {
+                                val lead = if (start > 0 && !source[start - 1].isWhitespace()) " " else ""
+                                val tail = if (end < source.length && !source[end].isWhitespace()) " " else ""
+                                descriptors += FoldingDescriptor(
+                                    element.node, element.textRange, null,
+                                    lead + TokenRenderer.COLON_RETURN_TYPE + tail,  // Reuse "as" for type annotations
+                                )
+                            }
                             isNamedArgumentColon(element) -> {
                                 val lead = if (start > 0 && !source[start - 1].isWhitespace()) " " else ""
                                 val tail = if (end < source.length && !source[end].isWhitespace()) " " else ""
@@ -372,25 +380,47 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
         return name.contains("Label")
     }
 
+    private fun isTypeAnnotationColon(element: LeafPsiElement): Boolean {
+        var current: PsiElement? = element.parent
+        while (current != null) {
+            val name = current.javaClass.simpleName
+            // Detect type annotation contexts: class properties, variable declarations, parameters
+            if (name.contains("TypeAnnotation") ||
+                name.contains("Field") || name.contains("ClassProperty") ||
+                name.contains("PropertySignature") || name.contains("TypeScriptProperty") ||
+                name.contains("PsiField") || name.contains("PropertyDeclaration") ||
+                name.contains("Parameter") || name.contains("VariableDeclaration")
+            ) return true
+
+            // Stop climbing at statements or object contexts
+            if (name.contains("Statement") || name.contains("ObjectLiteral") ||
+                name.contains("ObjectProperty") || name.contains("Destructuring")
+            ) return false
+            current = current.parent
+        }
+        return false
+    }
+
     private fun isObjectPropertyColon(element: LeafPsiElement): Boolean {
         var current: PsiElement? = element.parent
         while (current != null) {
             val name = current.javaClass.simpleName
-            // Detect object literal / type annotation contexts
+            // Detect object literal property bindings and destructuring
             if (name.contains("ObjectLiteral") || name.contains("ObjectProperty") ||
-                name.contains("Property") || name.contains("ObjectElement") ||
-                name.contains("Destructuring") || name.contains("TypeAnnotation") ||
+                name.contains("ObjectElement") || name.contains("Destructuring") ||
                 name.contains("JSXAttribute") || name.contains("XmlAttribute")
             ) return true
 
-            // Detect class/interface property declarations
+            // Stop climbing at type/field contexts (those go to isTypeAnnotationColon)
             if (name.contains("Field") || name.contains("ClassProperty") ||
                 name.contains("PropertySignature") || name.contains("TypeScriptProperty") ||
-                name.contains("PsiField") || name.contains("PropertyDeclaration")
-            ) return true
+                name.contains("PsiField") || name.contains("PropertyDeclaration") ||
+                name.contains("TypeAnnotation") || name.contains("Parameter") ||
+                name.contains("VariableDeclaration")
+            ) return false
 
             // Stop climbing when we reach statement or ternary boundaries
-            if (name.contains("Statement") || name.contains("Tenary") ||
+            if (name.contains("Statement") || name.contains("Ternary") ||
                 name.contains("Conditional") || (name.contains("Expression") && !name.contains("Object"))
             ) return false
             current = current.parent
