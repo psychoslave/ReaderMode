@@ -382,9 +382,16 @@ class ReaderModeFoldingBuilder : FoldingBuilderEx(), DumbAware {
                 name.contains("Destructuring") || name.contains("TypeAnnotation") ||
                 name.contains("JSXAttribute") || name.contains("XmlAttribute")
             ) return true
+
+            // Detect class/interface property declarations
+            if (name.contains("Field") || name.contains("ClassProperty") ||
+                name.contains("PropertySignature") || name.contains("TypeScriptProperty") ||
+                name.contains("PsiField") || name.contains("PropertyDeclaration")
+            ) return true
+
             // Stop climbing when we reach statement or ternary boundaries
-            if (name.contains("Statement") || name.contains("Ternary") ||
-                name.contains("Conditional") || name.contains("Expression") && !name.contains("Object")
+            if (name.contains("Statement") || name.contains("Tenary") ||
+                name.contains("Conditional") || (name.contains("Expression") && !name.contains("Object"))
             ) return false
             current = current.parent
         }
